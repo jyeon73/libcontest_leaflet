@@ -97,10 +97,8 @@ document.getElementById('chatSendBtn').addEventListener('click', async () => {
   if (!question) return;
 
   const chatLog = document.getElementById('chatLog');
-  chatLog.innerHTML += `<p><b>나:</b> ${question}</p>`;
+  chatLog.innerHTML += `<p><b>나:</b> ${question}</p><p id="loading"><i>검색 중...</i></p>`;
   input.value = '';
-
-  chatLog.innerHTML += `<p id="loading"><i>답변 생성 중...</i></p>`;
 
   const response = await fetch('/api/chat', {
     method: 'POST',
@@ -109,7 +107,21 @@ document.getElementById('chatSendBtn').addEventListener('click', async () => {
   });
 
   const data = await response.json();
-
   document.getElementById('loading').remove();
-  chatLog.innerHTML += `<p><b>AI 사서:</b> ${data.answer}</p>`;
+
+  if (data.selected.length === 0) {
+    chatLog.innerHTML += `<p>관련 자료를 찾지 못했습니다.</p>`;
+    return;
+  }
+
+  const cardsHtml = data.selected.map(item => `
+    <div class="card">
+      <p><b>${item.title}</b> (${item.type})</p>
+      <p>${item.author} · ${item.year}</p>
+      <p><i>${item.reason}</i></p>
+      <a href="${item.url}" target="_blank">원문 보기</a>
+    </div>
+  `).join('');
+
+  chatLog.innerHTML += cardsHtml;
 });

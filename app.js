@@ -20,6 +20,13 @@ const places = [
       url: 'https://www.nl.go.kr/...'
     }
   ]},
+  {
+    name: '서대문 독립문·서대문형무소',
+    lat: 37.5729, lng: 126.9564,
+    archives: [
+      { title: '독립신문 원문', url: '' }
+    ]
+  },
   { name: '마포 양화진·절두산', lat: 37.5487, lng: 126.9107, archives: [] },
   { name: '노량진·한강철교', lat: 37.5133, lng: 126.9424, archives: [] },
   { name: '숙명여대·효창공원', lat: 37.5405, lng: 126.9614, archives: [] }
@@ -37,6 +44,7 @@ places.forEach(p => {
 
 function renderPanel(place) {
   currentIndex = 0;
+  currentPlaceName = place.name;
 
   const panel = document.getElementById('panel');
 
@@ -80,3 +88,28 @@ function renderPanel(place) {
 
   drawCard();
 }
+
+let currentPlaceName = ''; // 현재 선택된 장소 이름 저장
+
+document.getElementById('chatSendBtn').addEventListener('click', async () => {
+  const input = document.getElementById('chatInput');
+  const question = input.value.trim();
+  if (!question) return;
+
+  const chatLog = document.getElementById('chatLog');
+  chatLog.innerHTML += `<p><b>나:</b> ${question}</p>`;
+  input.value = '';
+
+  chatLog.innerHTML += `<p id="loading"><i>답변 생성 중...</i></p>`;
+
+  const response = await fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ question, placeName: currentPlaceName })
+  });
+
+  const data = await response.json();
+
+  document.getElementById('loading').remove();
+  chatLog.innerHTML += `<p><b>AI 사서:</b> ${data.answer}</p>`;
+});

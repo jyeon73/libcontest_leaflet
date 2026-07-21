@@ -46,30 +46,30 @@ function renderPanel(place) {
   currentIndex = 0;
   currentPlaceName = place.name;
 
-  const panel = document.getElementById('panel');
+  const cardArea = document.getElementById('cardArea'); // panel → cardArea로 변경
 
   function drawCard() {
     const archive = place.archives[currentIndex];
 
     if (!archive) {
-      panel.innerHTML = `<h3>${place.name}</h3><p>등록된 자료가 없습니다.</p>`;
+      cardArea.innerHTML = `<h3>${place.name}</h3><p>등록된 자료가 없습니다.</p>`; // panel → cardArea
       return;
     }
 
-    panel.innerHTML = `
-  <h3>${place.name}</h3>
-  <div class="card">
-    <img src="${archive.image}" alt="${archive.title}" />
-    <p><b>${archive.title}</b></p>
-    <p>${archive.description}</p>
-    <a href="${archive.url}" target="_blank">원문 보기</a>
-  </div>
-  <div class="nav">
-    <button id="prevBtn">이전</button>
-    <span>${currentIndex + 1} / ${place.archives.length}</span>
-    <button id="nextBtn">다음</button>
-  </div>
-`;
+    cardArea.innerHTML = `
+      <h3>${place.name}</h3>
+      <div class="card">
+        <img src="${archive.image}" alt="${archive.title}" />
+        <p><b>${archive.title}</b></p>
+        <p>${archive.description}</p>
+        <a href="${archive.url}" target="_blank">원문 보기</a>
+      </div>
+      <div class="nav">
+        <button id="prevBtn">이전</button>
+        <span>${currentIndex + 1} / ${place.archives.length}</span>
+        <button id="nextBtn">다음</button>
+      </div>
+    `; // panel → cardArea
 
     document.getElementById('prevBtn').onclick = () => {
       if (currentIndex > 0) {

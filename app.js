@@ -28,10 +28,21 @@ const places = [
   { name: '숙명여대·효창공원', lat: 37.5405, lng: 126.9614, emoji: '🎓', archives: [] }
 ];
 
+// 마커 색 — places.forEach보다 반드시 위에 있어야 함
+const redIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
 let currentIndex = 0;
+let currentPlaceName = '';
 
 places.forEach(p => {
-  const marker = L.marker([p.lat, p.lng]).addTo(map);
+  const marker = L.marker([p.lat, p.lng], { icon: redIcon }).addTo(map);
 
   marker.bindTooltip(p.emoji, {
     permanent: true,
@@ -49,13 +60,13 @@ function renderPanel(place) {
   currentIndex = 0;
   currentPlaceName = place.name;
 
-  const cardArea = document.getElementById('cardArea'); // panel → cardArea로 변경
+  const cardArea = document.getElementById('cardArea');
 
   function drawCard() {
     const archive = place.archives[currentIndex];
 
     if (!archive) {
-      cardArea.innerHTML = `<h3>${place.name}</h3><p>등록된 자료가 없습니다.</p>`; // panel → cardArea
+      cardArea.innerHTML = `<h3>${place.name}</h3><p>등록된 자료가 없습니다.</p>`;
       return;
     }
 
@@ -72,7 +83,7 @@ function renderPanel(place) {
         <span>${currentIndex + 1} / ${place.archives.length}</span>
         <button id="nextBtn">다음</button>
       </div>
-    `; // panel → cardArea
+    `;
 
     document.getElementById('prevBtn').onclick = () => {
       if (currentIndex > 0) {
@@ -91,8 +102,6 @@ function renderPanel(place) {
 
   drawCard();
 }
-
-let currentPlaceName = ''; // 현재 선택된 장소 이름 저장
 
 document.getElementById('chatSendBtn').addEventListener('click', async () => {
   const input = document.getElementById('chatInput');

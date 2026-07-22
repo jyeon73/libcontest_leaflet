@@ -1,41 +1,44 @@
 const map = L.map('map').setView([37.5665, 126.9780], 12);
 
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
   attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
   maxZoom: 19
 }).addTo(map);
 
 const places = [
-  { name: '경복궁', lat: 37.5796, lng: 126.9770, archives: [
-    {
-      title: '경복궁도(고지도)',
-      image: 'https://picsum.photos/400/300',
-      description: '조선시대 경복궁 배치를 그린 고지도. 전각 배치와 궁역 경계를 확인할 수 있다.',
-      url: 'https://www.nl.go.kr/...'
-    },
-    {
-      title: '조선왕조실록 관련 기록',
-      image: 'https://example.com/sillok.jpg',
-      description: '경복궁 창건 및 중건 관련 실록 기사 발췌.',
-      url: 'https://www.nl.go.kr/...'
-    }
-  ]},
+  {
+    name: '경복궁',
+    lat: 37.5796, lng: 126.9770,
+    emoji: '🏯',
+    archives: [
+      { title: '경복궁도(고지도)', image: 'https://picsum.photos/400/300', description: '조선시대 경복궁 배치를 그린 고지도. 전각 배치와 궁역 경계를 확인할 수 있다.', url: 'https://www.nl.go.kr/...' },
+      { title: '조선왕조실록 관련 기록', image: 'https://example.com/sillok.jpg', description: '경복궁 창건 및 중건 관련 실록 기사 발췌.', url: 'https://www.nl.go.kr/...' }
+    ]
+  },
   {
     name: '서대문 독립문·서대문형무소',
     lat: 37.5729, lng: 126.9564,
+    emoji: '⛓️',
     archives: [
       { title: '독립신문 원문', url: '' }
     ]
   },
-  { name: '마포 양화진·절두산', lat: 37.5487, lng: 126.9107, archives: [] },
-  { name: '노량진·한강철교', lat: 37.5133, lng: 126.9424, archives: [] },
-  { name: '숙명여대·효창공원', lat: 37.5405, lng: 126.9614, archives: [] }
+  { name: '마포 양화진·절두산', lat: 37.5487, lng: 126.9107, emoji: '⛪', archives: [] },
+  { name: '노량진·한강철교', lat: 37.5133, lng: 126.9424, emoji: '🌉', archives: [] },
+  { name: '숙명여대·효창공원', lat: 37.5405, lng: 126.9614, emoji: '🎓', archives: [] }
 ];
 
 let currentIndex = 0;
 
 places.forEach(p => {
   const marker = L.marker([p.lat, p.lng]).addTo(map);
+
+  marker.bindTooltip(p.emoji, {
+    permanent: true,
+    direction: 'top',
+    offset: [0, -10],
+    className: 'emblem-tooltip'
+  });
 
   marker.on('click', () => {
     renderPanel(p);

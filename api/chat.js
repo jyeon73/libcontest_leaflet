@@ -3,7 +3,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'POST만 허용됩니다' });
   }
 
-  const { question, placeName } = req.body;
+  const { question, placeName, debug } = req.body;
 
   const keyword = await extractSearchKeyword(question, placeName);
 
@@ -13,7 +13,10 @@ export default async function handler(req, res) {
   const items = parseItems(xmlText);
 
   if (items.length === 0) {
-    return res.status(200).json({ selected: [], searchedKeyword: keyword });
+    return res.status(200).json({
+      selected: [], searchedKeyword: keyword,
+      ...(debug ? { debug: { itemsFound: 0, xmlStatus: xmlResponse.status, xmlSnippet: xmlText.slice(0, 800) } } : {})
+    });
   }
 
   const candidateList = items.map((it, i) =>
@@ -54,7 +57,10 @@ export default async function handler(req, res) {
     reason: s.reason
   })).filter(x => x.title);
 
-  res.status(200).json({ selected: result, searchedKeyword: keyword });
+  res.status(200).json({
+    selected: result, searchedKeyword: keyword,
+    ...(debug ? { debug: { itemsFound: items.length, gptSelectionRaw: gptData?.choices?.[0]?.message?.content, gptError: gptData?.error } } : {})
+  });
 }
 
 async function extractSearchKeyword(question, placeName) {

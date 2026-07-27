@@ -15,20 +15,12 @@ const places = [
       { title: '조선왕조실록 관련 기록', image: 'https://example.com/sillok.jpg', description: '경복궁 창건 및 중건 관련 실록 기사 발췌.', url: 'https://www.nl.go.kr/...' }
     ]
   },
-  {
-    name: '서대문 독립문·서대문형무소',
-    lat: 37.5729, lng: 126.9564,
-    emoji: '⛓️',
-    archives: [
-      { title: '독립신문 원문', url: '' }
-    ]
-  },
+  { name: '서대문 독립문·서대문형무소', lat: 37.5729, lng: 126.9564, emoji: '⛓️', archives: [ { title: '독립신문 원문', url: '' } ] },
   { name: '마포 양화진·절두산', lat: 37.5487, lng: 126.9107, emoji: '⛪', archives: [] },
   { name: '노량진·한강철교', lat: 37.5133, lng: 126.9424, emoji: '🌉', archives: [] },
   { name: '숙명여대·효창공원', lat: 37.5405, lng: 126.9614, emoji: '🎓', archives: [] }
 ];
 
-// 마커 색 — places.forEach보다 반드시 위에 있어야 함
 const redIcon = new L.Icon({
   iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
@@ -41,22 +33,58 @@ const redIcon = new L.Icon({
 let currentIndex = 0;
 let currentPlaceName = '';
 
-places.forEach(p => {
-  const marker = L.marker([p.lat, p.lng], { icon: redIcon }).addTo(map);
+// 즐겨찾기 관리
+function getFavorites() {
+  const saved = localStorage.getItem('favoritePlaces');
+  return saved ? JSON.parse(saved) : [];
+}
+function isFavorite(name) {
+  return getFavorites().includes(name);
+}
+function toggleFavorite(name) {
+  let favorites = getFavorites();
+  if (favorites.includes(name)) {
+    favorites = favorites.filter(f => f !== name);
+  } else {
+    favorites.push(name);
+  }
+  localStorage.setItem('favoritePlaces', JSON.stringify(favorites));
+}
 
-  marker.bindTooltip(p.emoji, {
+// 메모 관리
+function getNotes() {
+  const saved = localStorage.getItem('placeNotes');
+  return saved ? JSON.parse(saved) : {};
+}
+function getNote(name) {
+  return getNotes()[name] || '';
+}
+function saveNote(name, text) {
+  const notes = getNotes();
+  notes[name] = text;
+  localStorage.setItem('placeNotes', JSON.stringify(notes));
+}
+
+function updateTooltip(marker, p) {
+  const star = isFavorite(p.name) ? '⭐' : '';
+  marker.unbindTooltip();
+  marker.bindTooltip(`${star}${p.emoji}`, {
     permanent: true,
     direction: 'top',
     offset: [0, -10],
     className: 'emblem-tooltip'
   });
+}
 
+places.forEach(p => {
+  const marker = L.marker([p.lat, p.lng], { icon: redIcon }).addTo(map);
+  updateTooltip(marker, p);
   marker.on('click', () => {
-    renderPanel(p);
+    renderPanel(p, marker);
   });
 });
 
-function renderPanel(place) {
+function renderPanel(place, marker) {
   currentIndex = 0;
   currentPlaceName = place.name;
 
@@ -64,40 +92,59 @@ function renderPanel(place) {
 
   function drawCard() {
     const archive = place.archives[currentIndex];
+    const favLabel = isFavorite(place.name) ? '⭐ 즐겨찾기 해제' : '☆ 즐겨찾기 추가';
+    const savedNote = getNote(place.name);
 
-    if (!archive) {
-      cardArea.innerHTML = `<h3>${place.name}</h3><p>등록된 자료가 없습니다.</p>`;
-      return;
-    }
+    const bodyHtml = archive
+      ? `
+        <div class="card">
+          <img src="${archive.image}" alt="${archive.title}" />
+          <p><b>${archive.title}</b></p>
+          <p>${archive.description}</p>
+          <a href="${archive.url}" target="_blank">원문 보기</a>
+        </div>
+        <div class="nav">
+          <button id="prevBtn">이전</button>
+          <span>${currentIndex + 1} / ${place.archives.length}</span>
+          <button id="nextBtn">다음</button>
+        </div>
+      `
+      : `<p>등록된 자료가 없습니다.</p>`;
 
     cardArea.innerHTML = `
       <h3>${place.name}</h3>
-      <div class="card">
-        <img src="${archive.image}" alt="${archive.title}" />
-        <p><b>${archive.title}</b></p>
-        <p>${archive.description}</p>
-        <a href="${archive.url}" target="_blank">원문 보기</a>
-      </div>
-      <div class="nav">
-        <button id="prevBtn">이전</button>
-        <span>${currentIndex + 1} / ${place.archives.length}</span>
-        <button id="nextBtn">다음</button>
+      <button id="favBtn">${favLabel}</button>
+      ${bodyHtml}
+      <div class="note-area">
+        <label for="noteInput">나만의 메모</label>
+        <textarea id="noteInput" rows="3" placeholder="이 장소에 대해 기록해두고 싶은 내용을 적어보세요">${savedNote}</textarea>
+        <button id="noteSaveBtn">메모 저장</button>
+        <span id="noteStatus"></span>
       </div>
     `;
 
-    document.getElementById('prevBtn').onclick = () => {
-      if (currentIndex > 0) {
-        currentIndex--;
-        drawCard();
-      }
+    document.getElementById('favBtn').onclick = () => {
+      toggleFavorite(place.name);
+      updateTooltip(marker, place);
+      drawCard();
     };
 
-    document.getElementById('nextBtn').onclick = () => {
-      if (currentIndex < place.archives.length - 1) {
-        currentIndex++;
-        drawCard();
-      }
+    document.getElementById('noteSaveBtn').onclick = () => {
+      const text = document.getElementById('noteInput').value;
+      saveNote(place.name, text);
+      const status = document.getElementById('noteStatus');
+      status.textContent = '저장됨 ✓';
+      setTimeout(() => { status.textContent = ''; }, 1500);
     };
+
+    if (archive) {
+      document.getElementById('prevBtn').onclick = () => {
+        if (currentIndex > 0) { currentIndex--; drawCard(); }
+      };
+      document.getElementById('nextBtn').onclick = () => {
+        if (currentIndex < place.archives.length - 1) { currentIndex++; drawCard(); }
+      };
+    }
   }
 
   drawCard();
@@ -120,6 +167,8 @@ document.getElementById('chatSendBtn').addEventListener('click', async () => {
 
   const data = await response.json();
   document.getElementById('loading').remove();
+
+  chatLog.innerHTML += `<p style="color:gray;font-size:12px;">🔍 검색어: ${data.searchedKeyword}</p>`;
 
   if (data.selected.length === 0) {
     chatLog.innerHTML += `<p>관련 자료를 찾지 못했습니다.</p>`;

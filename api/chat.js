@@ -5,22 +5,21 @@ export default async function handler(req, res) {
 
   const { question, placeName } = req.body;
 
-  // 1. 국중도 검색 (장소명 키워드로)
-  const searchUrl = `https://www.nl.go.kr/NL/search/openApi/searchKolisNet.do?key=${process.env.NL_API_KEY}&kwd=${encodeURIComponent(placeName)}&apiType=xml&pageSize=15`;
+  const keyword = await extractSearchKeyword(question, placeName);
+
+  const searchUrl = `https://www.nl.go.kr/NL/search/openApi/searchKolisNet.do?key=${process.env.NL_API_KEY}&kwd=${encodeURIComponent(keyword)}&apiType=xml&pageSize=15`;
   const xmlResponse = await fetch(searchUrl);
   const xmlText = await xmlResponse.text();
   const items = parseItems(xmlText);
 
   if (items.length === 0) {
-    return res.status(200).json({ selected: [] });
+    return res.status(200).json({ selected: [], searchedKeyword: keyword });
   }
 
-  // 2. GPT에 넘길 후보 목록 (메타데이터만, 짧게)
   const candidateList = items.map((it, i) =>
     `${i}: [${it.type}] ${it.title} / ${it.author} / ${it.year}`
   ).join('\n');
 
-  // 3. GPT 호출 — 선택만, 생성 없음
   const gptResponse = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -30,14 +29,8 @@ export default async function handler(req, res) {
     body: JSON.stringify({
       model: 'gpt-4o-mini',
       messages: [
-        {
-          role: 'system',
-          content: '너는 도서관 자료 목록에서 질문과 가장 관련있는 항목을 고르는 역할만 한다. 목록에 없는 내용을 만들어내지 마라. 반드시 JSON 배열로만 답하라. 형식: [{"index":0,"reason":"짧은 이유 한 문장"}]. 최대 4개까지만 고른다.'
-        },
-        {
-          role: 'user',
-          content: `장소: ${placeName}\n질문: ${question}\n\n[목록]\n${candidateList}`
-        }
+        { role: 'system', content: '너는 도서관 자료 목록에서 질문과 가장 관련있는 항목을 고르는 역할만 한다. 목록에 없는 내용을 만들어내지 마라. 반드시 JSON 배열로만 답하라. 형식: [{"index":0,"reason":"짧은 이유 한 문장"}]. 최대 4개까지만 고른다.' },
+        { role: 'user', content: `장소: ${placeName}\n질문: ${question}\n\n[검색결과 목록]\n${candidateList}` }
       ],
       max_tokens: 300
     })
@@ -48,19 +41,47 @@ export default async function handler(req, res) {
   try {
     selection = JSON.parse(gptData.choices[0].message.content);
   } catch (e) {
-    selection = []; // GPT가 JSON 형식 안 지켰을 경우 대비
+    console.error('[chat.js] GPT 선별 응답 JSON 파싱 실패:', {
+      rawContent: gptData?.choices?.[0]?.message?.content,
+      gptError: gptData?.error,
+      parseError: e.message
+    });
+    selection = [];
   }
 
-  // 4. 선택된 인덱스에 해당하는 실제 데이터(메타데이터는 GPT가 아니라 items에서 그대로 가져옴)
   const result = selection.map(s => ({
     ...items[s.index],
     reason: s.reason
-  })).filter(x => x.title); // 잘못된 인덱스 걸러내기
+  })).filter(x => x.title);
 
-  res.status(200).json({ selected: result });
+  res.status(200).json({ selected: result, searchedKeyword: keyword });
 }
 
-// --- 파싱 함수는 파일 하단에 그대로 유지 ---
+async function extractSearchKeyword(question, placeName) {
+  const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
+    },
+    body: JSON.stringify({
+      model: 'gpt-4o-mini',
+      messages: [
+        { role: 'system', content: '너는 사용자 질문에서 도서관 자료 검색에 쓸 핵심 키워드만 뽑는 역할이다. 설명 없이 검색어만 짧게 출력하라(최대 5단어). 장소명은 반드시 포함시켜라.' },
+        { role: 'user', content: `장소: ${placeName}\n질문: ${question}` }
+      ],
+      max_tokens: 30
+    })
+  });
+
+  const data = await response.json();
+  const keyword = data.choices?.[0]?.message?.content?.trim();
+  if (!keyword) {
+    console.error('[chat.js] 검색어 추출 실패, placeName으로 대체:', data?.error || data);
+  }
+  return keyword || placeName;
+}
+
 function extractTag(block, tag) {
   const match = block.match(new RegExp(`<${tag}>([\\s\\S]*?)</${tag}>`));
   if (!match) return '';

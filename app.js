@@ -11,8 +11,10 @@ const places = [
     lat: 37.5796, lng: 126.9770,
     emoji: '🏯',
     archives: [
-      { title: '경복궁도(고지도)', image: 'https://picsum.photos/400/300', description: '조선시대 경복궁 배치를 그린 고지도. 전각 배치와 궁역 경계를 확인할 수 있다.', url: 'https://www.nl.go.kr/...' },
-      { title: '조선왕조실록 관련 기록', image: 'https://example.com/sillok.jpg', description: '경복궁 창건 및 중건 관련 실록 기사 발췌.', url: 'https://www.nl.go.kr/...' }
+      { title: '경복궁도(고지도)', image: 'https://picsum.photos/seed/gbg1/400/300', description: '조선시대 경복궁 배치를 그린 고지도. 전각 배치와 궁역 경계를 확인할 수 있다.', url: 'https://www.nl.go.kr/...' },
+      { title: '조선왕조실록 관련 기록', image: 'https://picsum.photos/seed/gbg2/400/300', description: '경복궁 창건 및 중건 관련 실록 기사 발췌.', url: 'https://www.nl.go.kr/...' },
+      { title: '(임시) 자료 예시 3', image: 'https://picsum.photos/seed/gbg3/400/300', description: '슬라이드 UI 확인용 임시 자료. 추후 실제 자료로 교체 예정.', url: 'https://www.nl.go.kr/...' },
+      { title: '(임시) 자료 예시 4', image: 'https://picsum.photos/seed/gbg4/400/300', description: '슬라이드 UI 확인용 임시 자료. 추후 실제 자료로 교체 예정.', url: 'https://www.nl.go.kr/...' }
     ]
   },
   { name: '서대문 독립문·서대문형무소', lat: 37.5729, lng: 126.9564, emoji: '⛓️', archives: [ { title: '독립신문 원문', url: '' } ] },
@@ -97,16 +99,14 @@ function renderPanel(place, marker) {
 
     const bodyHtml = archive
       ? `
+        <div class="thumb-strip">
+          ${place.archives.map((a, i) => `<img src="${a.image}" alt="${a.title}" class="thumb${i === currentIndex ? ' active' : ''}" data-index="${i}" />`).join('')}
+        </div>
         <div class="card">
           <img src="${archive.image}" alt="${archive.title}" />
           <p><b>${archive.title}</b></p>
           <p>${archive.description}</p>
           <a href="${archive.url}" target="_blank">원문 보기</a>
-        </div>
-        <div class="nav">
-          <button id="prevBtn">이전</button>
-          <span>${currentIndex + 1} / ${place.archives.length}</span>
-          <button id="nextBtn">다음</button>
         </div>
       `
       : `<p>등록된 자료가 없습니다.</p>`;
@@ -138,12 +138,12 @@ function renderPanel(place, marker) {
     };
 
     if (archive) {
-      document.getElementById('prevBtn').onclick = () => {
-        if (currentIndex > 0) { currentIndex--; drawCard(); }
-      };
-      document.getElementById('nextBtn').onclick = () => {
-        if (currentIndex < place.archives.length - 1) { currentIndex++; drawCard(); }
-      };
+      cardArea.querySelectorAll('.thumb').forEach(img => {
+        img.onclick = () => {
+          currentIndex = parseInt(img.dataset.index, 10);
+          drawCard();
+        };
+      });
     }
   }
 

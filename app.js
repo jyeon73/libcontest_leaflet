@@ -19,8 +19,8 @@ const places = [
     ]
   },
   { name: '서대문 독립문·서대문형무소', lat: 37.5729, lng: 126.9564, emoji: '⛓️', emblem: 'emblems/seodaemun.png', archives: [ { title: '독립신문 원문', url: '' } ] },
-  { name: '마포 양화진·절두산', lat: 37.5487, lng: 126.9107, emoji: '⛪', archives: [] },
-  { name: '노량진·한강철교', lat: 37.5133, lng: 126.9424, emoji: '🌉', archives: [] },
+  { name: '마포 양화진·절두산', lat: 37.5487, lng: 126.9107, emoji: '⛪', emblem: 'emblems/mapo.png', archives: [] },
+  { name: '노량진·한강철교', lat: 37.5133, lng: 126.9424, emoji: '🌉', emblem: 'emblems/hangang.png', archives: [] },
   { name: '숙명여대·효창공원', lat: 37.5405, lng: 126.9614, emoji: '🎓', emblem: 'emblems/hyochang.png', archives: [] }
 ];
 
@@ -38,10 +38,10 @@ function createIcon(p) {
   const star = isFavorite(p.name) ? '<span class="fav-star">⭐</span>' : '';
   return L.divIcon({
     className: 'emblem-marker',
-    html: `<div class="emblem-wrap"><img src="${p.emblem}" class="emblem-img" alt="${p.name}" />${star}</div>`,
-    iconSize: [54, 54],
-    iconAnchor: [27, 27],
-    popupAnchor: [0, -27]
+    html: `<div class="emblem-wrap"><div class="emblem-bg"></div><img src="${p.emblem}" class="emblem-img" alt="${p.name}" />${star}<span class="emblem-label">${p.name}</span></div>`,
+    iconSize: [86, 86],
+    iconAnchor: [43, 43],
+    popupAnchor: [0, -43]
   });
 }
 

@@ -16,9 +16,16 @@
     .emblem-tooltip { background: none; border: none; box-shadow: none; font-size: 20px; }
     .emblem-tooltip::before { display: none; }
     .emblem-marker { background: none; border: none; }
-    .emblem-wrap { position: relative; width: 54px; height: 54px; }
-    .emblem-img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 3px 4px rgba(0,0,0,0.45)); cursor: pointer; }
-    .fav-star { position: absolute; top: -4px; right: -6px; font-size: 18px; text-shadow: 0 0 3px #fff, 0 0 3px #fff, 0 0 3px #fff; }
+    .emblem-wrap { position: relative; width: 86px; height: 86px; }
+    .emblem-bg { position: absolute; inset: 6px; border-radius: 50%; background: #fff; box-shadow: 0 3px 8px rgba(0,0,0,0.35); }
+    .emblem-img { position: relative; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 3px 4px rgba(0,0,0,0.45)); cursor: pointer; transition: transform 0.15s ease; }
+    .emblem-wrap:hover .emblem-img { transform: scale(1.14); }
+    .emblem-label {
+      position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%);
+      font-size: 11px; white-space: nowrap; background: rgba(255,255,255,0.9);
+      padding: 1px 7px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.25); pointer-events: none;
+    }
+    .fav-star { position: absolute; top: -2px; right: -2px; font-size: 20px; text-shadow: 0 0 3px #fff, 0 0 3px #fff, 0 0 3px #fff; }
     .note-area { margin-top: 12px; padding-top: 12px; border-top: 1px solid #ddd; }
     .note-area textarea { width: 100%; box-sizing: border-box; resize: vertical; font-family: inherit; margin: 4px 0; }
     #noteStatus { color: green; font-size: 13px; margin-left: 8px; }

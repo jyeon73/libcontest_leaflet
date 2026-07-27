@@ -10,6 +10,7 @@ const places = [
     name: '경복궁',
     lat: 37.5796, lng: 126.9770,
     emoji: '🏯',
+    emblem: 'emblems/gyeongbokgung.png',
     archives: [
       { title: '경복궁도(고지도)', image: 'https://picsum.photos/seed/gbg1/400/300', description: '조선시대 경복궁 배치를 그린 고지도. 전각 배치와 궁역 경계를 확인할 수 있다.', url: 'https://www.nl.go.kr/...' },
       { title: '조선왕조실록 관련 기록', image: 'https://picsum.photos/seed/gbg2/400/300', description: '경복궁 창건 및 중건 관련 실록 기사 발췌.', url: 'https://www.nl.go.kr/...' },
@@ -17,10 +18,10 @@ const places = [
       { title: '(임시) 자료 예시 4', image: 'https://picsum.photos/seed/gbg4/400/300', description: '슬라이드 UI 확인용 임시 자료. 추후 실제 자료로 교체 예정.', url: 'https://www.nl.go.kr/...' }
     ]
   },
-  { name: '서대문 독립문·서대문형무소', lat: 37.5729, lng: 126.9564, emoji: '⛓️', archives: [ { title: '독립신문 원문', url: '' } ] },
+  { name: '서대문 독립문·서대문형무소', lat: 37.5729, lng: 126.9564, emoji: '⛓️', emblem: 'emblems/seodaemun.png', archives: [ { title: '독립신문 원문', url: '' } ] },
   { name: '마포 양화진·절두산', lat: 37.5487, lng: 126.9107, emoji: '⛪', archives: [] },
   { name: '노량진·한강철교', lat: 37.5133, lng: 126.9424, emoji: '🌉', archives: [] },
-  { name: '숙명여대·효창공원', lat: 37.5405, lng: 126.9614, emoji: '🎓', archives: [] }
+  { name: '숙명여대·효창공원', lat: 37.5405, lng: 126.9614, emoji: '🎓', emblem: 'emblems/hyochang.png', archives: [] }
 ];
 
 const redIcon = new L.Icon({
@@ -31,6 +32,18 @@ const redIcon = new L.Icon({
   popupAnchor: [1, -34],
   shadowSize: [41, 41]
 });
+
+function createIcon(p) {
+  if (!p.emblem) return redIcon;
+  const star = isFavorite(p.name) ? '<span class="fav-star">⭐</span>' : '';
+  return L.divIcon({
+    className: 'emblem-marker',
+    html: `<div class="emblem-wrap"><img src="${p.emblem}" class="emblem-img" alt="${p.name}" />${star}</div>`,
+    iconSize: [54, 54],
+    iconAnchor: [27, 27],
+    popupAnchor: [0, -27]
+  });
+}
 
 let currentIndex = 0;
 let currentPlaceName = '';
@@ -78,9 +91,17 @@ function updateTooltip(marker, p) {
   });
 }
 
+function updateMarkerAppearance(marker, p) {
+  if (p.emblem) {
+    marker.setIcon(createIcon(p));
+  } else {
+    updateTooltip(marker, p);
+  }
+}
+
 places.forEach(p => {
-  const marker = L.marker([p.lat, p.lng], { icon: redIcon }).addTo(map);
-  updateTooltip(marker, p);
+  const marker = L.marker([p.lat, p.lng], { icon: createIcon(p) }).addTo(map);
+  if (!p.emblem) updateTooltip(marker, p);
   marker.on('click', () => {
     renderPanel(p, marker);
   });
@@ -125,7 +146,7 @@ function renderPanel(place, marker) {
 
     document.getElementById('favBtn').onclick = () => {
       toggleFavorite(place.name);
-      updateTooltip(marker, place);
+      updateMarkerAppearance(marker, place);
       drawCard();
     };
 

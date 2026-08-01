@@ -14,12 +14,23 @@ const redIcon = new L.Icon({
   shadowSize: [41, 41]
 });
 
+function getRepresentativeImage(p) {
+  if (!p.eras) return null;
+  for (const era of p.eras) {
+    const item = era.items.find(it => it.representative && it.image);
+    if (item) return item.image;
+  }
+  return null;
+}
+
 function createIcon(p) {
   if (!p.emblem) return redIcon;
   const star = isFavorite(p.name) ? '<span class="fav-star">⭐</span>' : '';
+  const repImage = getRepresentativeImage(p);
+  const preview = repImage ? `<img class="marker-hover-preview" src="${repImage}" alt="${p.name} 대표이미지" />` : '';
   return L.divIcon({
     className: 'emblem-marker',
-    html: `<div class="emblem-wrap"><div class="emblem-bg"></div><img src="${p.emblem}" class="emblem-img" alt="${p.name}" />${star}<span class="emblem-label">${p.name}</span></div>`,
+    html: `<div class="emblem-wrap"><div class="emblem-bg"></div><img src="${p.emblem}" class="emblem-img" alt="${p.name}" />${star}<span class="emblem-label">${p.name}</span>${preview}</div>`,
     iconSize: [86, 86],
     iconAnchor: [43, 43],
     popupAnchor: [0, -43]
@@ -115,11 +126,7 @@ function renderPanel(place, marker) {
     const savedNote = getNote(place.name);
 
     const eraTabsHtml = hasEras
-      ? `<div class="era-tabs">${place.eras.map((e, i) => {
-          const repItem = e.items.find(it => it.representative && it.image);
-          const preview = repItem ? `<img class="era-hover-preview" src="${repItem.image}" alt="${repItem.title}" />` : '';
-          return `<div class="era-hover-wrap"><button class="era-tab${i === currentEraIndex ? ' active' : ''}" data-era="${i}">${e.era}</button>${preview}</div>`;
-        }).join('')}</div>`
+      ? `<div class="era-tabs">${place.eras.map((e, i) => `<button class="era-tab${i === currentEraIndex ? ' active' : ''}" data-era="${i}">${e.era}</button>`).join('')}</div>`
       : '';
 
     const eraDescHtml = era && era.description ? `<div class="era-desc">${formatEraDescription(era.description)}</div>` : '';

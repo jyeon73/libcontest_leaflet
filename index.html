@@ -46,7 +46,14 @@
     .note-area textarea { width: 100%; min-height: 160px; box-sizing: border-box; resize: vertical; font-family: inherit; margin: 4px 0; }
     #noteStatus { color: green; font-size: 13px; margin-left: 8px; }
     #chatbox { margin-top: 32px; padding-top: 20px; border-top: 3px solid #999; }
-    #chatInput { padding: 6px 8px; }
+    #chatLog { min-height: 40px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 10px; }
+    .chat-msg { max-width: 85%; padding: 10px 14px; border-radius: 14px; font-size: 14px; line-height: 1.5; }
+    .chat-msg.me { align-self: flex-end; background: #333; color: #fff; border-bottom-right-radius: 4px; }
+    .chat-msg.bot { align-self: flex-start; background: #fff; border: 1px solid #e0e0e0; border-bottom-left-radius: 4px; }
+    .chat-msg.meta { align-self: flex-start; color: #888; font-size: 12px; background: none; padding: 0 4px; }
+    .chat-input-row { display: flex; gap: 8px; }
+    #chatInput { flex: 1; padding: 12px 14px; font-size: 14px; border-radius: 12px; border: 1px solid #ccc; box-sizing: border-box; }
+    #chatSendBtn { padding: 0 20px; border-radius: 12px; border: 1px solid #333; background: #333; color: #fff; font-size: 14px; cursor: pointer; }
   </style>
 </head>
 <body>
@@ -61,8 +68,10 @@
         <span class="section-text">국중도 자료 탐색 도우미예요!<small>궁금한 점을 편하게 물어보세요</small></span>
       </div>
       <div id="chatLog"></div>
-      <input type="text" id="chatInput" placeholder="🔍 궁금한 점을 입력해보세요" />
-      <button id="chatSendBtn">전송</button>
+      <div class="chat-input-row">
+        <input type="text" id="chatInput" placeholder="🔍 궁금한 점을 입력해보세요" />
+        <button id="chatSendBtn">전송</button>
+      </div>
     </div>
   </div>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>

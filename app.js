@@ -203,7 +203,8 @@ document.getElementById('chatSendBtn').addEventListener('click', async () => {
   if (!question) return;
 
   const chatLog = document.getElementById('chatLog');
-  chatLog.innerHTML += `<p><b>나:</b> ${question}</p><p id="loading"><i>검색 중...</i></p>`;
+  chatLog.innerHTML += `<div class="chat-msg me">${question}</div><div class="chat-msg bot" id="loading">검색 중...</div>`;
+  chatLog.scrollTop = chatLog.scrollHeight;
   input.value = '';
 
   const response = await fetch('/api/chat', {
@@ -215,15 +216,16 @@ document.getElementById('chatSendBtn').addEventListener('click', async () => {
   const data = await response.json();
   document.getElementById('loading').remove();
 
-  chatLog.innerHTML += `<p style="color:gray;font-size:12px;">🔍 검색어: ${data.searchedKeyword}</p>`;
+  chatLog.innerHTML += `<div class="chat-msg meta">🔍 검색어: ${data.searchedKeyword}</div>`;
 
   if (data.selected.length === 0) {
-    chatLog.innerHTML += `<p>관련 자료를 찾지 못했습니다.</p>`;
+    chatLog.innerHTML += `<div class="chat-msg bot">관련 자료를 찾지 못했습니다.</div>`;
+    chatLog.scrollTop = chatLog.scrollHeight;
     return;
   }
 
   const cardsHtml = data.selected.map(item => `
-    <div class="card">
+    <div class="chat-msg bot">
       <p><b>${item.title}</b> (${item.type})</p>
       <p>${item.author} · ${item.year}</p>
       <p><i>${item.reason}</i></p>
@@ -232,4 +234,5 @@ document.getElementById('chatSendBtn').addEventListener('click', async () => {
   `).join('');
 
   chatLog.innerHTML += cardsHtml;
+  chatLog.scrollTop = chatLog.scrollHeight;
 });

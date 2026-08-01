@@ -5,25 +5,6 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
   maxZoom: 19
 }).addTo(map);
 
-const places = [
-  {
-    name: '경복궁',
-    lat: 37.5796, lng: 126.9770,
-    emoji: '🏯',
-    emblem: 'emblems/gyeongbokgung.png',
-    archives: [
-      { title: '경복궁도(고지도)', image: 'https://picsum.photos/seed/gbg1/400/300', description: '조선시대 경복궁 배치를 그린 고지도. 전각 배치와 궁역 경계를 확인할 수 있다.', url: 'https://www.nl.go.kr/...' },
-      { title: '조선왕조실록 관련 기록', image: 'https://picsum.photos/seed/gbg2/400/300', description: '경복궁 창건 및 중건 관련 실록 기사 발췌.', url: 'https://www.nl.go.kr/...' },
-      { title: '(임시) 자료 예시 3', image: 'https://picsum.photos/seed/gbg3/400/300', description: '슬라이드 UI 확인용 임시 자료. 추후 실제 자료로 교체 예정.', url: 'https://www.nl.go.kr/...' },
-      { title: '(임시) 자료 예시 4', image: 'https://picsum.photos/seed/gbg4/400/300', description: '슬라이드 UI 확인용 임시 자료. 추후 실제 자료로 교체 예정.', url: 'https://www.nl.go.kr/...' }
-    ]
-  },
-  { name: '서대문 독립문·서대문형무소', lat: 37.5729, lng: 126.9564, emoji: '⛓️', emblem: 'emblems/seodaemun.png', archives: [ { title: '독립신문 원문', url: '' } ] },
-  { name: '마포 양화진·절두산', lat: 37.5487, lng: 126.9107, emoji: '⛪', emblem: 'emblems/mapo.png', archives: [] },
-  { name: '노량진·한강철교', lat: 37.5133, lng: 126.9424, emoji: '🌉', emblem: 'emblems/hangang.png', archives: [] },
-  { name: '숙명여대·효창공원', lat: 37.5405, lng: 126.9614, emoji: '🎓', emblem: 'emblems/hyochang.png', archives: [] }
-];
-
 const redIcon = new L.Icon({
   iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
@@ -107,34 +88,58 @@ places.forEach(p => {
   });
 });
 
+let currentEraIndex = 0;
+
 function renderPanel(place, marker) {
+  currentEraIndex = 0;
   currentIndex = 0;
   currentPlaceName = place.name;
 
   const cardArea = document.getElementById('cardArea');
 
   function drawCard() {
-    const archive = place.archives[currentIndex];
+    const hasEras = place.eras && place.eras.length > 0;
+    const era = hasEras ? place.eras[currentEraIndex] : null;
+    const archive = era ? era.items[currentIndex] : null;
     const favLabel = isFavorite(place.name) ? '⭐ 즐겨찾기 해제' : '☆ 즐겨찾기 추가';
     const savedNote = getNote(place.name);
 
-    const bodyHtml = archive
+    const eraTabsHtml = hasEras
+      ? `<div class="era-tabs">${place.eras.map((e, i) => `<button class="era-tab${i === currentEraIndex ? ' active' : ''}" data-era="${i}">${e.era}</button>`).join('')}</div>`
+      : '';
+
+    const eraDescHtml = era && era.description ? `<p class="era-desc">${era.description}</p>` : '';
+
+    const itemMetaHtml = archive ? `
+          <p><b>${archive.title}</b> ${archive.type ? `<span class="item-type">[${archive.type}]</span>` : ''}</p>
+          <p class="item-sub">${[archive.author, archive.publisher, archive.date].filter(Boolean).join(' · ')}</p>
+          ${archive.note ? `<p class="item-note">${archive.note}</p>` : ''}
+          ${archive.url ? `<a href="${archive.url}" target="_blank">원문 보기</a>` : '<span class="item-nolink">원문 링크 없음</span>'}
+    ` : '';
+
+    const bodyHtml = era
       ? `
-        <div class="thumb-strip">
-          ${place.archives.map((a, i) => `<img src="${a.image}" alt="${a.title}" class="thumb${i === currentIndex ? ' active' : ''}" data-index="${i}" />`).join('')}
-        </div>
-        <div class="card">
-          <img src="${archive.image}" alt="${archive.title}" />
-          <p><b>${archive.title}</b></p>
-          <p>${archive.description}</p>
-          <a href="${archive.url}" target="_blank">원문 보기</a>
-        </div>
+        ${eraDescHtml}
+        ${archive
+          ? `
+            <div class="thumb-strip">
+              ${era.items.map((a, i) => `<img src="${a.image || 'https://placehold.co/160x160?text=No+Image'}" alt="${a.title}" class="thumb${i === currentIndex ? ' active' : ''}" data-index="${i}" />`).join('')}
+            </div>
+            <div class="card">
+              ${archive.image ? `<img src="${archive.image}" alt="${archive.title}" />` : ''}
+              ${itemMetaHtml}
+            </div>
+          `
+          : `<p>등록된 자료가 없습니다.</p>`
+        }
       `
       : `<p>등록된 자료가 없습니다.</p>`;
 
     cardArea.innerHTML = `
       <h3>${place.name}</h3>
+      <p class="place-meta">${place.meta || '설명 및 메타데이터 입력'}</p>
       <button id="favBtn">${favLabel}</button>
+      ${eraTabsHtml}
       ${bodyHtml}
       <div class="note-area">
         <label for="noteInput">나만의 메모</label>
@@ -157,6 +162,14 @@ function renderPanel(place, marker) {
       status.textContent = '저장됨 ✓';
       setTimeout(() => { status.textContent = ''; }, 1500);
     };
+
+    cardArea.querySelectorAll('.era-tab').forEach(btn => {
+      btn.onclick = () => {
+        currentEraIndex = parseInt(btn.dataset.era, 10);
+        currentIndex = 0;
+        drawCard();
+      };
+    });
 
     if (archive) {
       cardArea.querySelectorAll('.thumb').forEach(img => {

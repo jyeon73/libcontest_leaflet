@@ -12,7 +12,7 @@ const places = [
         era: '조선 시대',
         description: '1395년(태조 4): 조선 왕조 경복궁 창건. \'경복(景福)\'은 《시경》의 "이미 술에 취하고 덕에 배부르니 군자 만년 태평한 복을 누리리라"에서 따왔다.\n1592년(선조 25): 임진왜란 발발로 인해 궁궐 전체가 훼손되고 방화로 전소되었다. 이후 약 270여 년간 재건되지 못하고 폐허로 방치되었다.\n1867년(고종 4): 흥선대원군의 주도로 경복궁 중건이 완료되었다. 조선 왕실의 권위를 회복하고자 대규모로 중창하였다.\n1895년(고종 32): 경복궁 내 건청궁에서 명성황후가 일본군과 낭인들에 의해 살해당하는 을미사변이 발생했다.',
         items: [
-          { title: '경복궁도(景福宮圖)', type: '고문헌', note: '경복궁 복원 이전 약식 안내도 · 표준번호: UCI G701:B00052464441', image: 'archive-images/gyeongbokgung_joseon_01.jpg', url: 'https://www.nl.go.kr/NL/contents/search.do?pageNum=1&pageSize=30&srchTarget=total&kwd=%E6%99%AF%E7%A6%8F%E5%AE%AE%E5%9C%96#viewKey=CNTS_00052464441&viewType=C&category=%EA%B3%A0%EB%AC%B8%ED%97%8C&pageIdx=2&jourId=' },
+          { title: '경복궁도(景福宮圖)', type: '고문헌', representative: true, note: '경복궁 복원 이전 약식 안내도 · 표준번호: UCI G701:B00052464441', image: 'archive-images/gyeongbokgung_joseon_01.jpg', url: 'https://www.nl.go.kr/NL/contents/search.do?pageNum=1&pageSize=30&srchTarget=total&kwd=%E6%99%AF%E7%A6%8F%E5%AE%AE%E5%9C%96#viewKey=CNTS_00052464441&viewType=C&category=%EA%B3%A0%EB%AC%B8%ED%97%8C&pageIdx=2&jourId=' },
           { title: '경복궁수리(景福宮修理)', type: '신문', publisher: '대한매일신보사', date: '1907-10-05', image: 'archive-images/gyeongbokgung_joseon_02.jpg', url: 'https://nl.go.kr/newspaper/detail.do?content_id=CNTS_00093141172' }
         ]
       },
@@ -59,7 +59,7 @@ const places = [
         items: [
           { title: '데모학생 육명구속: 21일서울 교도소에', type: '신문', publisher: '마산일보사', date: '1964-04-21', image: 'archive-images/seodaemun_hyeondae_01.jpg', url: 'https://nl.go.kr/newspaper/detail.do?content_id=CNTS_00115011561' },
           { title: '서대문형무소 역사관 개관', type: '잡지/학술지', publisher: '문경문화원', date: '1998', note: '원문 확인 불가', image: '', url: '' },
-          { title: '장벽을 넘어 해방으로, 여성 독립운동가의 생애', type: '주제별 컬렉션', note: '유관순, 권애라, 김마리아, 강주룡, 박차정 등 여성 독립운동가 9인의 생애를 담은 국립중앙도서관 컬렉션', image: 'archive-images/seodaemun_hyeondae_02.jpg', url: 'https://www.nl.go.kr/NL/contents/N20103000000.do?schM=contList&schOpt1=CA0000000049&schOpt2=CA0000000600&page=1#cont_banner' }
+          { title: '장벽을 넘어 해방으로, 여성 독립운동가의 생애', type: '주제별 컬렉션', representative: true, note: '유관순, 권애라, 김마리아, 강주룡, 박차정 등 여성 독립운동가 9인의 생애를 담은 국립중앙도서관 컬렉션', image: 'archive-images/seodaemun_hyeondae_02.jpg', url: 'https://www.nl.go.kr/NL/contents/N20103000000.do?schM=contList&schOpt1=CA0000000049&schOpt2=CA0000000600&page=1#cont_banner' }
         ]
       }
     ]
@@ -75,7 +75,7 @@ const places = [
         era: '근대(대한제국)',
         description: '1866년: 흥선대원군이 천주교를 탄압하여 수많은 신자와 프랑스 선교사를 처형한 병인박해 사건이 발생했다. 이는 이후 프랑스 함대가 강화도를 거쳐 한강 수로를 직접 침범한 사건인 병인양요로 이어졌다. 양화진은 한양 도성으로 진입하는 수로의 마지막 관문이자 물류 집결지로서, 조선 수군의 핵심 방어 기지가 위치한 방위의 마지노선이었다.',
         items: [
-          { title: '병인양요시 조선인의 양인관(이): 천주교박해후 양이침범을 깨다른대원군 강화와 한강방비', type: '신문', publisher: '매일신보사', date: '1932-03-05', image: 'archive-images/mapo_geundae_01.jpg', url: 'https://nl.go.kr/newspaper/detail.do?content_id=CNTS_00094521597' },
+          { title: '병인양요시 조선인의 양인관(이): 천주교박해후 양이침범을 깨다른대원군 강화와 한강방비', type: '신문', representative: true, publisher: '매일신보사', date: '1932-03-05', image: 'archive-images/mapo_geundae_01.jpg', url: 'https://nl.go.kr/newspaper/detail.do?content_id=CNTS_00094521597' },
           { title: '절두산 순교성지', type: '웹사이트', note: '국립중앙도서관이 운영하는 웹 아카이브 서비스 OASIS에서 절두산 순교성지의 역사와 병인박해, 순교자 기념 시설 등을 소개하는 웹자료를 확인할 수 있다. (접근 불가능한 페이지 다수)', image: 'archive-images/mapo_geundae_02.jpg', url: 'http://wayback.nl.go.kr/wayback/jsp/oasis/oasisReplay.jsp?collection=20170530132850&contentsId=CNTS_00092426269&url=http://jeoldusan.or.kr&licCd=0' },
           { title: '순무영등록(巡撫營謄錄)', type: '고문헌', author: '순무영', note: '1866년 병인양요 때 설치된 임시 군영인 \'순무영\'에서 작성한 공식 등록으로, 프랑스군에 대응하기 위한 군사 작전과 병력 동원, 무기·군량 조달, 전투 상황 등을 기록한 1차 사료이다.', image: 'archive-images/mapo_geundae_03.png', url: 'https://www.nl.go.kr/NL/contents/search.do?pageNum=1&pageSize=30&srchTarget=total&kwd=%EC%88%9C%EB%AC%B4%EC%98%81%EB%93%B1%EB%A1%9D#viewKey=CNTS_00047974816&viewType=C&category=%EA%B3%A0%EB%AC%B8%ED%97%8C&pageIdx=2&jourId=' },
           { title: '한말역화, 병인양요(일)', type: '신문', publisher: '군산신문사', date: '1949-01-04', image: 'archive-images/mapo_geundae_04.jpg', url: '' },
@@ -123,7 +123,7 @@ const places = [
         era: '근대(대한제국)',
         description: '1899년: 대한민국 최초의 철도인 경인선이 개통되었다.\n1900년: 용산과 노량진을 잇는 한강 최초의 다리인 한강철교가 세워졌다.',
         items: [
-          { title: '(근대초기 한국문화 과거로 가는 시간여행) 1899년 9월 18일 노량진역에서 열린 경인선 개통식', type: '이미지/사진', date: '2004', image: '', url: 'https://www.nl.go.kr/NL/contents/search.do?pageNum=1&pageSize=30&srchTarget=total&kwd=%EA%B2%BD%EC%9D%B8%EC%84%A0_%EA%B0%9C%ED%86%B5#viewKey=CNTS_00132804351&viewType=C&category=%EB%A9%80%ED%8B%B0%EB%AF%B8%EB%94%94%EC%96%B4&pageIdx=5&jourId=' },
+          { title: '(근대초기 한국문화 과거로 가는 시간여행) 1899년 9월 18일 노량진역에서 열린 경인선 개통식', type: '이미지/사진', representative: true, date: '2004', image: '', url: 'https://www.nl.go.kr/NL/contents/search.do?pageNum=1&pageSize=30&srchTarget=total&kwd=%EA%B2%BD%EC%9D%B8%EC%84%A0_%EA%B0%9C%ED%86%B5#viewKey=CNTS_00132804351&viewType=C&category=%EB%A9%80%ED%8B%B0%EB%AF%B8%EB%94%94%EC%96%B4&pageIdx=5&jourId=' },
           { title: '경인선은 개통(京仁線은 開通)', type: '신문', publisher: '매일신보사', date: '1940-07-11', image: 'archive-images/noryangjin_geundae_01.jpg', url: 'https://nl.go.kr/newspaper/detail.do?content_id=CNTS_00095032653' },
           { title: '조선철도사(朝鮮鐵道史)', type: '도서', author: '조선총독부 철도국', publisher: '조선총독부철도국', date: '1915', note: '일제 강점기 경인선을 비롯한 조선의 주요 철도의 건설 과정, 노선, 운영 현황 등을 기록한 역사 자료이다.', image: 'archive-images/noryangjin_geundae_02.png', url: 'https://www.nl.go.kr/NL/contents/search.do?pageNum=1&pageSize=30&srchTarget=total&kwd=%EC%A1%B0%EC%84%A0%EC%B2%A0%EB%8F%84%EC%82%AC#viewKey=CNTS_00047999901&viewType=C&category=%EB%8F%84%EC%84%9C&pageIdx=4&jourId=' }
         ]
@@ -159,7 +159,7 @@ const places = [
         items: [
           { title: '산림청차(山林請借)', type: '신문', publisher: '황성신문사', date: '1908-02-28', note: '"용산 거류 일본민단장이 효창원 산림을 공원지로 빌려달라 청원"', image: 'archive-images/hyochang_geundae_01.jpg', url: 'https://nl.go.kr/newspaper/detail.do?content_id=CNTS_00093820031' },
           { title: '나도향, 『벙어리 삼룡이』(雜誌《黎明》창간호, 1925.7.1)', type: '잡지/학술지', publisher: '여명사', note: '효창원 일대의 옛 지명(연화봉)을 배경으로 한 소설', image: '', url: '' },
-          { title: '경성명물또하나 삽만원공비들여 효창원을 대개수: 오롱조롱 각가지 시설을 완비 아동본위락천지화', type: '신문', publisher: '매일신보사', date: '1938-02-19', note: '효창공원설계약도 수록', image: 'archive-images/hyochang_geundae_02.jpg', url: 'https://nl.go.kr/newspaper/detail.do?content_id=CNTS_00094881004' }
+          { title: '경성명물또하나 삽만원공비들여 효창원을 대개수: 오롱조롱 각가지 시설을 완비 아동본위락천지화', type: '신문', representative: true, publisher: '매일신보사', date: '1938-02-19', note: '효창공원설계약도 수록', image: 'archive-images/hyochang_geundae_02.jpg', url: 'https://nl.go.kr/newspaper/detail.do?content_id=CNTS_00094881004' }
         ]
       },
       {

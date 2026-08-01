@@ -115,7 +115,11 @@ function renderPanel(place, marker) {
     const savedNote = getNote(place.name);
 
     const eraTabsHtml = hasEras
-      ? `<div class="era-tabs">${place.eras.map((e, i) => `<button class="era-tab${i === currentEraIndex ? ' active' : ''}" data-era="${i}">${e.era}</button>`).join('')}</div>`
+      ? `<div class="era-tabs">${place.eras.map((e, i) => {
+          const repItem = e.items.find(it => it.representative && it.image);
+          const preview = repItem ? `<img class="era-hover-preview" src="${repItem.image}" alt="${repItem.title}" />` : '';
+          return `<div class="era-hover-wrap"><button class="era-tab${i === currentEraIndex ? ' active' : ''}" data-era="${i}">${e.era}</button>${preview}</div>`;
+        }).join('')}</div>`
       : '';
 
     const eraDescHtml = era && era.description ? `<div class="era-desc">${formatEraDescription(era.description)}</div>` : '';
@@ -148,7 +152,7 @@ function renderPanel(place, marker) {
     cardArea.innerHTML = `
       <h3>${place.name}</h3>
       <p class="place-meta">${place.meta || '설명 및 메타데이터 입력'}</p>
-      <button id="favBtn">${favLabel}</button>
+      <button id="favBtn" class="fav-btn">${favLabel}</button>
       ${eraTabsHtml}
       ${bodyHtml}
       <div class="note-area">
@@ -157,7 +161,7 @@ function renderPanel(place, marker) {
           <span class="section-text">나만의 메모<small>이 장소에 대해 자유롭게 기록해보세요</small></span>
         </div>
         <textarea id="noteInput" rows="8" placeholder="이 장소에 대해 기록해두고 싶은 내용을 적어보세요">${savedNote}</textarea>
-        <button id="noteSaveBtn">메모 저장</button>
+        <button id="noteSaveBtn" class="btn-primary">메모 저장</button>
         <span id="noteStatus"></span>
       </div>
     `;

@@ -88,6 +88,16 @@ places.forEach(p => {
   });
 });
 
+function formatEraDescription(text) {
+  return text.split('\n').map(line => {
+    const m = line.match(/^([^:：]{1,20}):\s*(.*)$/);
+    if (m && /\d/.test(m[1])) {
+      return `<p class="era-line"><b>${m[1]}</b>${m[2]}</p>`;
+    }
+    return `<p class="era-line">${line}</p>`;
+  }).join('');
+}
+
 let currentEraIndex = 0;
 
 function renderPanel(place, marker) {
@@ -108,7 +118,7 @@ function renderPanel(place, marker) {
       ? `<div class="era-tabs">${place.eras.map((e, i) => `<button class="era-tab${i === currentEraIndex ? ' active' : ''}" data-era="${i}">${e.era}</button>`).join('')}</div>`
       : '';
 
-    const eraDescHtml = era && era.description ? `<p class="era-desc">${era.description}</p>` : '';
+    const eraDescHtml = era && era.description ? `<div class="era-desc">${formatEraDescription(era.description)}</div>` : '';
 
     const itemMetaHtml = archive ? `
           <p><b>${archive.title}</b> ${archive.type ? `<span class="item-type">[${archive.type}]</span>` : ''}</p>

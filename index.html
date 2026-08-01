@@ -38,15 +38,14 @@
       padding: 1px 7px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.25); pointer-events: none;
     }
     .fav-star { position: absolute; top: -2px; right: -2px; font-size: 20px; text-shadow: 0 0 3px #fff, 0 0 3px #fff, 0 0 3px #fff; }
+    .section-header { display: flex; align-items: center; gap: 10px; background: #eef3ff; border: 1px solid #cddaf5; border-radius: 14px; padding: 10px 14px; margin-bottom: 12px; }
+    .section-header .section-icon { font-size: 26px; line-height: 1; }
+    .section-header .section-text { font-size: 13px; color: #2b4a8c; font-weight: bold; }
+    .section-header .section-text small { display: block; font-weight: normal; color: #555; margin-top: 2px; }
     .note-area { margin-top: 32px; padding-top: 20px; border-top: 3px solid #999; }
-    .note-area label { font-weight: bold; }
-    .note-area textarea { width: 100%; box-sizing: border-box; resize: vertical; font-family: inherit; margin: 4px 0; }
+    .note-area textarea { width: 100%; min-height: 160px; box-sizing: border-box; resize: vertical; font-family: inherit; margin: 4px 0; }
     #noteStatus { color: green; font-size: 13px; margin-left: 8px; }
     #chatbox { margin-top: 32px; padding-top: 20px; border-top: 3px solid #999; }
-    .chat-header { display: flex; align-items: center; gap: 10px; background: #eef3ff; border: 1px solid #cddaf5; border-radius: 14px; padding: 10px 14px; margin-bottom: 12px; }
-    .chat-header .chat-mascot { font-size: 26px; line-height: 1; }
-    .chat-header .chat-bubble { font-size: 13px; color: #2b4a8c; font-weight: bold; }
-    .chat-header .chat-bubble small { display: block; font-weight: normal; color: #555; margin-top: 2px; }
     #chatInput { padding: 6px 8px; }
   </style>
 </head>
@@ -57,9 +56,9 @@
       <p>장소를 클릭하면 자료가 여기에 표시됩니다.</p>
     </div>
     <div id="chatbox">
-      <div class="chat-header">
-        <span class="chat-mascot">🐯</span>
-        <span class="chat-bubble">국중도 자료 탐색 도우미예요!<small>궁금한 점을 편하게 물어보세요</small></span>
+      <div class="section-header">
+        <span class="section-icon">🐯</span>
+        <span class="section-text">국중도 자료 탐색 도우미예요!<small>궁금한 점을 편하게 물어보세요</small></span>
       </div>
       <div id="chatLog"></div>
       <input type="text" id="chatInput" placeholder="🔍 궁금한 점을 입력해보세요" />

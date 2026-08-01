@@ -152,8 +152,11 @@ function renderPanel(place, marker) {
       ${eraTabsHtml}
       ${bodyHtml}
       <div class="note-area">
-        <label for="noteInput">나만의 메모</label>
-        <textarea id="noteInput" rows="3" placeholder="이 장소에 대해 기록해두고 싶은 내용을 적어보세요">${savedNote}</textarea>
+        <div class="section-header">
+          <span class="section-icon">📝</span>
+          <span class="section-text">나만의 메모<small>이 장소에 대해 자유롭게 기록해보세요</small></span>
+        </div>
+        <textarea id="noteInput" rows="8" placeholder="이 장소에 대해 기록해두고 싶은 내용을 적어보세요">${savedNote}</textarea>
         <button id="noteSaveBtn">메모 저장</button>
         <span id="noteStatus"></span>
       </div>

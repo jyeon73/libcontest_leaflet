@@ -5,11 +5,7 @@ export default async function handler(req, res) {
 
   const { question, placeName, debug } = req.body;
 
-  const extractDebug = {};
-  const rawGptKeyword = await extractSearchKeyword(question, placeName, extractDebug);
-  if (debug) {
-    return res.status(200).json({ selected: [], searchedKeyword: rawGptKeyword, debug: extractDebug });
-  }
+  const rawGptKeyword = await extractSearchKeyword(question, placeName);
   const gptKeyword = isUsableKeyword(rawGptKeyword) ? rawGptKeyword : null;
   const simplifiedPlace = simplifyPlaceName(placeName);
 
@@ -19,10 +15,15 @@ export default async function handler(req, res) {
 
   let keyword = candidates[0];
   let items = [];
+  const candidateDebug = [];
   for (const candidate of candidates) {
     items = await searchNL(candidate);
+    candidateDebug.push({ candidate, itemsFound: items.length });
     keyword = candidate;
     if (items.length > 0) break;
+  }
+  if (debug) {
+    return res.status(200).json({ selected: [], searchedKeyword: keyword, debug: { candidateDebug } });
   }
 
   if (items.length === 0) {

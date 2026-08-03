@@ -36,7 +36,7 @@ const places = [
     ]
   },
   {
-    name: '서대문 독립문·서대문형무소',
+    name: '서대문형무소',
     lat: 37.5744, lng: 126.9564,
     emoji: '⛓️',
     emblem: 'emblems/seodaemun.png',
@@ -139,7 +139,7 @@ const places = [
     ]
   },
   {
-    name: '숙명여대·효창공원',
+    name: '효창공원',
     lat: 37.5423, lng: 126.9611,
     emoji: '🎓',
     emblem: 'emblems/hyochang.png',

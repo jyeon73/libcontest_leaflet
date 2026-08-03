@@ -31,9 +31,9 @@ function createIcon(p) {
   return L.divIcon({
     className: 'emblem-marker',
     html: `<div class="emblem-wrap"><div class="emblem-bg"></div><img src="${p.emblem}" class="emblem-img" alt="${p.name}" />${star}<span class="emblem-label">${p.name}</span>${preview}</div>`,
-    iconSize: [86, 86],
-    iconAnchor: [43, 43],
-    popupAnchor: [0, -43]
+    iconSize: [58, 58],
+    iconAnchor: [29, 29],
+    popupAnchor: [0, -29]
   });
 }
 

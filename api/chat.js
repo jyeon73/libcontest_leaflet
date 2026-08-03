@@ -104,14 +104,10 @@ async function extractSearchKeyword(question, placeName, extractDebug) {
     body: JSON.stringify({
       model: 'gpt-4o-mini',
       messages: [
-        { role: 'system', content: '너는 도서관 자료 검색창에 입력할 검색어 하나만 출력하는 도구다. 다른 말은 절대 하지 말고 검색어 단어만 출력해라. 질문에 구체적인 대상(인물, 건물, 사건 이름 등)이 있으면 그 단어를 최우선으로 사용해라. 장소 이름이 "A·B"처럼 여러 지명이 합쳐진 형태면 핵심 지명 한 단어만 사용해라. 검색은 여러 단어를 함께 넣으면 실패하기 쉬우니 1~2단어로 짧게 답해라.' },
-        { role: 'user', content: '이 장소는 "마포 양화진·절두산" 이야. 질문: "당인리발전소가 뭐야?" 검색어는?' },
-        { role: 'assistant', content: '당인리발전소' },
-        { role: 'user', content: '이 장소는 "경복궁" 이야. 질문: "경복궁이 언제 지어졌어?" 검색어는?' },
-        { role: 'assistant', content: '경복궁' },
-        { role: 'user', content: `이 장소는 "${placeName}" 이야. 질문: "${question}" 검색어는?` }
+        { role: 'system', content: '너는 사용자 질문에서 도서관 자료 검색에 쓸 핵심 키워드만 뽑는 역할이다. 설명 없이 검색어만 짧게 출력하라(최대 5단어). 장소명은 반드시 포함시켜라. 장소명이 "A·B"처럼 여러 지명이 합쳐진 형태면 핵심 지명 한 단어만 사용해라(예: "마포 양화진·절두산" -> "마포").' },
+        { role: 'user', content: `장소: ${placeName}\n질문: ${question}` }
       ],
-      max_tokens: 50,
+      max_tokens: 30,
       temperature: 0.3
     })
   });

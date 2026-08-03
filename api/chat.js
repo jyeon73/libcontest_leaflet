@@ -3,7 +3,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'POST만 허용됩니다' });
   }
 
-  const { question, placeName, debug } = req.body;
+  const { question, placeName } = req.body;
 
   const rawGptKeyword = await extractSearchKeyword(question, placeName);
   const gptKeyword = isUsableKeyword(rawGptKeyword) ? rawGptKeyword : null;
@@ -15,15 +15,10 @@ export default async function handler(req, res) {
 
   let keyword = candidates[0];
   let items = [];
-  const candidateDebug = [];
   for (const candidate of candidates) {
     items = await searchNL(candidate);
-    candidateDebug.push({ candidate, itemsFound: items.length });
     keyword = candidate;
     if (items.length > 0) break;
-  }
-  if (debug) {
-    return res.status(200).json({ selected: [], searchedKeyword: keyword, debug: { candidateDebug } });
   }
 
   if (items.length === 0) {
@@ -95,7 +90,7 @@ async function searchNL(keyword) {
   return parseItems(xmlText);
 }
 
-async function extractSearchKeyword(question, placeName, extractDebug) {
+async function extractSearchKeyword(question, placeName) {
   const response = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -115,14 +110,6 @@ async function extractSearchKeyword(question, placeName, extractDebug) {
 
   const data = await response.json();
   const keyword = data.choices?.[0]?.message?.content?.trim();
-  if (extractDebug) {
-    extractDebug.status = response.status;
-    extractDebug.model = data.model;
-    extractDebug.finish_reason = data.choices?.[0]?.finish_reason;
-    extractDebug.rawContent = data.choices?.[0]?.message?.content;
-    extractDebug.usage = data.usage;
-    extractDebug.error = data.error;
-  }
   if (!isUsableKeyword(keyword)) {
     console.error('[chat.js] 검색어 추출 결과가 비정상적임, placeName으로 대체:', { keyword, gptError: data?.error });
   }

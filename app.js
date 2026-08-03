@@ -280,6 +280,14 @@ document.getElementById('chatSendBtn').addEventListener('click', async () => {
   if (!question) return;
 
   const chatLog = document.getElementById('chatLog');
+
+  if (!currentPlaceName) {
+    chatLog.innerHTML += `<div class="chat-msg me">${question}</div><div class="chat-msg bot">먼저 지도에서 궁금한 장소를 클릭해주세요! 장소를 선택해야 그 장소 자료로 검색할 수 있어요 🗺️</div>`;
+    chatLog.scrollTop = chatLog.scrollHeight;
+    input.value = '';
+    return;
+  }
+
   chatLog.innerHTML += `<div class="chat-msg me">${question}</div><div class="chat-msg bot" id="loading">검색 중...</div>`;
   chatLog.scrollTop = chatLog.scrollHeight;
   input.value = '';

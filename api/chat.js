@@ -5,12 +5,14 @@ export default async function handler(req, res) {
 
   const { question, placeName } = req.body;
 
-  const keyword = await extractSearchKeyword(question, placeName);
+  let keyword = await extractSearchKeyword(question, placeName);
+  let items = await searchNL(keyword);
 
-  const searchUrl = `https://www.nl.go.kr/NL/search/openApi/searchKolisNet.do?key=${process.env.NL_API_KEY}&kwd=${encodeURIComponent(keyword)}&apiType=xml&pageSize=15`;
-  const xmlResponse = await fetch(searchUrl);
-  const xmlText = await xmlResponse.text();
-  const items = parseItems(xmlText);
+  // 국중도 검색은 여러 단어를 AND로 매칭해서 0건이 자주 나옴 -> 장소명만으로 한 번 더 시도
+  if (items.length === 0 && keyword !== placeName) {
+    keyword = placeName;
+    items = await searchNL(keyword);
+  }
 
   if (items.length === 0) {
     return res.status(200).json({ selected: [], searchedKeyword: keyword });
@@ -57,6 +59,13 @@ export default async function handler(req, res) {
   res.status(200).json({ selected: result, searchedKeyword: keyword });
 }
 
+async function searchNL(keyword) {
+  const searchUrl = `https://www.nl.go.kr/NL/search/openApi/searchKolisNet.do?key=${process.env.NL_API_KEY}&kwd=${encodeURIComponent(keyword)}&apiType=xml&pageSize=15`;
+  const xmlResponse = await fetch(searchUrl);
+  const xmlText = await xmlResponse.text();
+  return parseItems(xmlText);
+}
+
 async function extractSearchKeyword(question, placeName) {
   const response = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
@@ -67,10 +76,10 @@ async function extractSearchKeyword(question, placeName) {
     body: JSON.stringify({
       model: 'gpt-4o-mini',
       messages: [
-        { role: 'system', content: '너는 사용자 질문에서 도서관 자료 검색에 쓸 핵심 키워드만 뽑는 역할이다. 설명 없이 검색어만 짧게 출력하라(최대 5단어). 장소명은 반드시 포함시켜라.' },
+        { role: 'system', content: '너는 사용자 질문에서 도서관 자료 검색에 쓸 핵심 키워드를 뽑는 역할이다. 설명 없이 검색어만 출력하라. 국중도 검색은 여러 단어를 AND로 매칭해서 단어가 많으면 0건이 되기 쉬우니, 최대한 1~2단어로 짧게 뽑아라(장소명 하나만 내도 됨). 장소명은 반드시 포함시켜라.' },
         { role: 'user', content: `장소: ${placeName}\n질문: ${question}` }
       ],
-      max_tokens: 30
+      max_tokens: 20
     })
   });
 

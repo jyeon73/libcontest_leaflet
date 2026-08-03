@@ -199,7 +199,11 @@ function renderPanel(place, marker) {
       cardArea.querySelectorAll('.thumb').forEach(img => {
         img.onclick = () => {
           currentIndex = parseInt(img.dataset.index, 10);
-          drawCard();
+          if (isMobileLayout()) {
+            openPhotoModal(era, currentIndex);
+          } else {
+            drawCard();
+          }
         };
       });
     }
@@ -207,6 +211,68 @@ function renderPanel(place, marker) {
 
   drawCard();
 }
+
+// ── 핸드폰 ver: 썸네일 탭 시 전체화면 사진 모달 ──
+function isMobileLayout() {
+  return window.matchMedia('(max-width: 768px)').matches;
+}
+
+let modalEra = null;
+let modalIndex = 0;
+
+function openPhotoModal(era, index) {
+  modalEra = era;
+  modalIndex = index;
+  renderPhotoModal();
+  document.getElementById('photoModal').classList.add('open');
+}
+
+function closePhotoModal() {
+  document.getElementById('photoModal').classList.remove('open');
+  modalEra = null;
+}
+
+function renderPhotoModal() {
+  if (!modalEra) return;
+  const item = modalEra.items[modalIndex];
+  document.getElementById('photoModalImg').src = item.image || 'https://placehold.co/600x400?text=No+Image';
+  document.getElementById('photoModalImg').alt = item.title;
+  document.getElementById('photoModalCounter').textContent = `${modalIndex + 1} / ${modalEra.items.length}`;
+  document.getElementById('photoModalInfo').innerHTML = `
+    <p><b>${item.title}</b> ${item.type ? `<span class="item-type">[${item.type}]</span>` : ''}</p>
+    <p class="item-sub">${[item.author, item.publisher, item.date].filter(Boolean).join(' · ')}</p>
+    ${item.note ? `<p class="item-note">${item.note}</p>` : ''}
+    ${item.url ? `<a href="${item.url}" target="_blank">원문 보기</a>` : '<span class="item-nolink">원문 링크 없음</span>'}
+  `;
+}
+
+function modalPrev() {
+  if (!modalEra) return;
+  modalIndex = (modalIndex - 1 + modalEra.items.length) % modalEra.items.length;
+  renderPhotoModal();
+}
+
+function modalNext() {
+  if (!modalEra) return;
+  modalIndex = (modalIndex + 1) % modalEra.items.length;
+  renderPhotoModal();
+}
+
+document.getElementById('photoModalClose').onclick = closePhotoModal;
+document.getElementById('photoModalPrev').onclick = modalPrev;
+document.getElementById('photoModalNext').onclick = modalNext;
+
+let touchStartX = 0;
+const photoModalImageWrap = document.getElementById('photoModalImageWrap');
+photoModalImageWrap.addEventListener('touchstart', e => {
+  touchStartX = e.touches[0].clientX;
+});
+photoModalImageWrap.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 40) {
+    if (dx > 0) modalPrev(); else modalNext();
+  }
+});
 
 document.getElementById('chatSendBtn').addEventListener('click', async () => {
   const input = document.getElementById('chatInput');

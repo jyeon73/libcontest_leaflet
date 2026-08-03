@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>지도 테스트</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
@@ -63,6 +64,34 @@
     .chat-msg.meta { align-self: flex-start; color: #888; font-size: 12px; background: none; padding: 0 4px; }
     .chat-input-row { display: flex; gap: 8px; }
     #chatInput { flex: 1; padding: 12px 14px; font-size: 14px; border-radius: 12px; border: 1px solid #ccc; box-sizing: border-box; }
+
+    /* 핸드폰 ver: 지도+패널을 세로로 쌓고, 썸네일 탭 시 전체화면 모달로 상세정보 표시 */
+    @media (max-width: 768px) {
+      body { flex-direction: column; }
+      #map { width: 100%; height: 42vh; }
+      #panel { width: 100%; height: 58vh; padding: 14px; }
+      .emblem-wrap { width: 46px; height: 46px; }
+      .emblem-label { font-size: 9px; bottom: -14px; }
+      .marker-hover-preview { width: 110px; height: 110px; }
+    }
+
+    .photo-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.94); z-index: 3000; flex-direction: column; }
+    .photo-modal.open { display: flex; }
+    .photo-modal-close {
+      position: absolute; top: 14px; right: 14px; width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(255,255,255,0.15); color: #fff; border: none; font-size: 20px; cursor: pointer; z-index: 3002;
+    }
+    .photo-modal-image-wrap { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; touch-action: pan-y; }
+    .photo-modal-image-wrap img { max-width: 92%; max-height: 92%; object-fit: contain; border-radius: 6px; }
+    .photo-modal-nav {
+      position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.15); color: #fff;
+      border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 18px; cursor: pointer; z-index: 3001;
+    }
+    .photo-modal-prev { left: 10px; }
+    .photo-modal-next { right: 10px; }
+    .photo-modal-counter { position: absolute; top: 16px; left: 16px; color: #fff; font-size: 13px; background: rgba(255,255,255,0.15); padding: 3px 10px; border-radius: 10px; }
+    .photo-modal-info { background: #fff; border-radius: 16px 16px 0 0; padding: 16px 20px 28px; max-height: 42vh; overflow-y: auto; box-sizing: border-box; }
+    .photo-modal-info b { display: block; font-size: 15px; margin-bottom: 4px; }
   </style>
 </head>
 <body>
@@ -82,6 +111,16 @@
         <button id="chatSendBtn" class="btn-primary">전송</button>
       </div>
     </div>
+  </div>
+  <div id="photoModal" class="photo-modal">
+    <button class="photo-modal-close" id="photoModalClose">✕</button>
+    <div class="photo-modal-image-wrap" id="photoModalImageWrap">
+      <button class="photo-modal-nav photo-modal-prev" id="photoModalPrev">‹</button>
+      <span class="photo-modal-counter" id="photoModalCounter"></span>
+      <img id="photoModalImg" src="" alt="" />
+      <button class="photo-modal-nav photo-modal-next" id="photoModalNext">›</button>
+    </div>
+    <div class="photo-modal-info" id="photoModalInfo"></div>
   </div>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="places-data.js"></script>

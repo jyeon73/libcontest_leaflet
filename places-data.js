@@ -6,10 +6,6 @@ const places = [
     lat: 37.5788, lng: 126.9770,
     emoji: '🏯',
     emblem: 'emblems/gyeongbokgung.png',
-    color: '#c9a227',
-    boundary: [
-      [37.5759, 126.9705], [37.5850, 126.9710], [37.5847, 126.9820], [37.5757, 126.9815]
-    ],
     meta: '설명 및 메타데이터 입력',
     eras: [
       {
@@ -44,10 +40,6 @@ const places = [
     lat: 37.5744, lng: 126.9564,
     emoji: '⛓️',
     emblem: 'emblems/seodaemun.png',
-    color: '#5b3a29',
-    boundary: [
-      [37.5735, 126.9552], [37.5754, 126.9550], [37.5757, 126.9575], [37.5738, 126.9578]
-    ],
     meta: '설명 및 메타데이터 입력',
     eras: [
       {
@@ -76,10 +68,6 @@ const places = [
     lat: 37.5457, lng: 126.9126,
     emoji: '⛪',
     emblem: 'emblems/mapo.png',
-    color: '#1f3a5f',
-    boundary: [
-      [37.5445, 126.9105], [37.5480, 126.9145], [37.5565, 126.9155], [37.5555, 126.9210], [37.5470, 126.9195], [37.5450, 126.9150]
-    ],
     meta: '설명 및 메타데이터 입력',
     eras: [
       {
@@ -103,14 +91,14 @@ const places = [
           { title: '당인리발전소(唐人里發電所)', type: '신문', publisher: '조선신문사', date: '1930-11-07', image: 'archive-images/mapo_ilje_01.jpg', url: 'https://nl.go.kr/newspaper/detail.do?content_id=CNTS_00099452576' },
           { title: '당인리발전소확장(唐人里發電所擴張)', type: '신문', publisher: '조선중앙일보사(여운형)', date: '1935-10-12', image: 'archive-images/mapo_ilje_02.jpg', url: 'https://nl.go.kr/newspaper/detail.do?content_id=CNTS_00093612587' },
           { title: '당인리발전소복구(唐人里發電所復舊)', type: '신문', publisher: '서울신문사', date: '1950-10-05', image: 'archive-images/mapo_ilje_03.jpg', url: 'https://nl.go.kr/newspaper/detail.do?content_id=CNTS_00133838724' },
-          { title: '이승만대통령 당인리화력발전소 시찰', type: '이미지/사진', date: '1959', note: '관내 이용', image: '', url: '' }
+          { title: '이승만대통령 당인리화력발전소 시찰', type: '이미지/사진', publisher: '국가기록원', date: '1959', note: '관내 이용 — 국립중앙도서관·국립어린이청소년도서관·국립세종도서관에서 무료 원문보기 가능', image: '', url: 'https://www.nl.go.kr/NL/contents/search.do?pageNum=1&pageSize=30&srchTarget=total&kwd=%EC%9D%B4%EC%8A%B9%EB%A7%8C+%EB%8B%B9%EC%9D%B8%EB%A6%AC#viewKey=CNTS_00133232465&viewType=C&category=%EB%A9%80%ED%8B%B0%EB%AF%B8%EB%94%94%EC%96%B4&pageIdx=1&jourId=' }
         ]
       },
       {
         era: '현대',
         description: '1958년에 착공되고 1962년 준공된 마포아파트는 단독 건물 형태가 아닌, 여러 동이 군집을 이루는 대한민국 최초의 대단위 단지형 아파트였다. 단순히 거주 인구의 밀도를 높인 것을 넘어, 내부 설비의 혁신이 동반되었다. 연탄보일러를 활용한 중앙난방 시스템이 최초로 시공되었으며, 수세식 화장실과 입식 부엌 등 당시로서는 최신식 서구형 주거 설비가 전면 도입되었다.',
         items: [
-          { title: '마포아파트 항공사진 촬영', type: '이미지/사진', date: '1963', note: '관내 이용', image: '', url: '' }
+          { title: '마포아파트 항공사진 촬영', type: '이미지/사진', publisher: '국가기록원', date: '1963', note: '관내 이용 — 국립중앙도서관·국립어린이청소년도서관·국립세종도서관에서 무료 원문보기 가능', image: '', url: 'https://www.nl.go.kr/NL/contents/search.do?pageNum=1&pageSize=30&srchTarget=total&kwd=%EB%A7%88%ED%8F%AC%EC%95%84%ED%8C%8C%ED%8A%B8+%ED%95%AD%EA%B3%B5#viewKey=CNTS_00133232431&viewType=C&category=%EB%A9%80%ED%8B%B0%EB%AF%B8%EB%94%94%EC%96%B4&pageIdx=1&jourId=' }
         ]
       }
     ]
@@ -120,10 +108,6 @@ const places = [
     lat: 37.5140, lng: 126.9470,
     emoji: '🌉',
     emblem: 'emblems/hangang.png',
-    color: '#3b6ea5',
-    boundary: [
-      [37.5110, 126.9450], [37.5120, 126.9420], [37.5145, 126.9455], [37.5230, 126.9530], [37.5245, 126.9560], [37.5135, 126.9490]
-    ],
     meta: '설명 및 메타데이터 입력',
     eras: [
       {
@@ -158,10 +142,6 @@ const places = [
     lat: 37.5420, lng: 126.9611,
     emoji: '🎓',
     emblem: 'emblems/hyochang.png',
-    color: '#2f6b3a',
-    boundary: [
-      [37.5395, 126.9590], [37.5445, 126.9595], [37.5448, 126.9635], [37.5398, 126.9630]
-    ],
     meta: '설명 및 메타데이터 입력',
     eras: [
       {

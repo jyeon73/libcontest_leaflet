@@ -116,6 +116,11 @@ function renderPanel(place, marker) {
   currentIndex = 0;
   currentPlaceName = place.name;
 
+  if (!document.body.classList.contains('place-selected')) {
+    document.body.classList.add('place-selected');
+    setTimeout(() => map.invalidateSize(), 260);
+  }
+
   const cardArea = document.getElementById('cardArea');
 
   function drawCard() {

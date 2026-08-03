@@ -3,9 +3,13 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'POST만 허용됩니다' });
   }
 
-  const { question, placeName } = req.body;
+  const { question, placeName, debug } = req.body;
 
-  const rawGptKeyword = await extractSearchKeyword(question, placeName);
+  const extractDebug = {};
+  const rawGptKeyword = await extractSearchKeyword(question, placeName, extractDebug);
+  if (debug) {
+    return res.status(200).json({ selected: [], searchedKeyword: rawGptKeyword, debug: extractDebug });
+  }
   const gptKeyword = isUsableKeyword(rawGptKeyword) ? rawGptKeyword : null;
   const simplifiedPlace = simplifyPlaceName(placeName);
 
@@ -90,7 +94,7 @@ async function searchNL(keyword) {
   return parseItems(xmlText);
 }
 
-async function extractSearchKeyword(question, placeName) {
+async function extractSearchKeyword(question, placeName, extractDebug) {
   const response = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -114,6 +118,14 @@ async function extractSearchKeyword(question, placeName) {
 
   const data = await response.json();
   const keyword = data.choices?.[0]?.message?.content?.trim();
+  if (extractDebug) {
+    extractDebug.status = response.status;
+    extractDebug.model = data.model;
+    extractDebug.finish_reason = data.choices?.[0]?.finish_reason;
+    extractDebug.rawContent = data.choices?.[0]?.message?.content;
+    extractDebug.usage = data.usage;
+    extractDebug.error = data.error;
+  }
   if (!isUsableKeyword(keyword)) {
     console.error('[chat.js] 검색어 추출 결과가 비정상적임, placeName으로 대체:', { keyword, gptError: data?.error });
   }

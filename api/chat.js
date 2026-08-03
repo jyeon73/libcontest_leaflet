@@ -5,12 +5,13 @@ export default async function handler(req, res) {
 
   const { question, placeName } = req.body;
 
-  const gptKeyword = await extractSearchKeyword(question, placeName);
+  const rawGptKeyword = await extractSearchKeyword(question, placeName);
+  const gptKeyword = isUsableKeyword(rawGptKeyword) ? rawGptKeyword : null;
   const simplifiedPlace = simplifyPlaceName(placeName);
 
   // 국중도 검색은 여러 단어를 AND로 매칭해서 0건이 되기 쉬움 -> 순서대로 시도
-  // 1) GPT가 뽑은 키워드 2) 장소 전체 표기 3) 장소의 핵심 명칭만(합성 지명의 "·" 이전 부분)
-  const candidates = [...new Set([gptKeyword, placeName, simplifiedPlace])];
+  // 1) GPT가 뽑은 키워드(깨졌거나 일반명사면 제외) 2) 장소 전체 표기 3) 장소의 핵심 명칭만(합성 지명의 "·" 이전 부분)
+  const candidates = [...new Set([gptKeyword, placeName, simplifiedPlace].filter(Boolean))];
 
   let keyword = candidates[0];
   let items = [];
@@ -71,6 +72,17 @@ function simplifyPlaceName(placeName) {
   return placeName.split(/[·\s]/)[0];
 }
 
+// GPT가 가끔 깨진 문자나 "장소"/"서울" 같은 엉뚱한 일반명사를 내놓는 경우를 걸러냄
+function isUsableKeyword(keyword) {
+  if (!keyword) return false;
+  const trimmed = keyword.trim();
+  if (trimmed.length < 2) return false;
+  if (/[�]/.test(trimmed)) return false; // 깨진 문자(치환 문자) 포함
+  const genericWords = ['장소', '질문', '없음', '검색어', '서울', '자료', '없다', '모름'];
+  if (genericWords.includes(trimmed)) return false;
+  return true;
+}
+
 async function searchNL(keyword) {
   const searchUrl = `https://www.nl.go.kr/NL/search/openApi/searchKolisNet.do?key=${process.env.NL_API_KEY}&kwd=${encodeURIComponent(keyword)}&apiType=xml&pageSize=15`;
   const xmlResponse = await fetch(searchUrl);
@@ -95,15 +107,15 @@ async function extractSearchKeyword(question, placeName) {
         { role: 'assistant', content: '경복궁' },
         { role: 'user', content: `이 장소는 "${placeName}" 이야. 질문: "${question}" 검색어는?` }
       ],
-      max_tokens: 20,
+      max_tokens: 50,
       temperature: 0.3
     })
   });
 
   const data = await response.json();
   const keyword = data.choices?.[0]?.message?.content?.trim();
-  if (!keyword) {
-    console.error('[chat.js] 검색어 추출 실패, placeName으로 대체:', data?.error || data);
+  if (!isUsableKeyword(keyword)) {
+    console.error('[chat.js] 검색어 추출 결과가 비정상적임, placeName으로 대체:', { keyword, gptError: data?.error });
   }
   return keyword || placeName;
 }

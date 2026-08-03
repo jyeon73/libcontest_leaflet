@@ -1,4 +1,4 @@
-const map = L.map('map').setView([37.5665, 126.9780], 12);
+const map = L.map('map').setView([37.5665, 126.9780], 13);
 
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
   attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
@@ -31,9 +31,9 @@ function createIcon(p) {
   return L.divIcon({
     className: 'emblem-marker',
     html: `<div class="emblem-wrap"><div class="emblem-bg"></div><img src="${p.emblem}" class="emblem-img" alt="${p.name}" />${star}<span class="emblem-label">${p.name}</span>${preview}</div>`,
-    iconSize: [58, 58],
-    iconAnchor: [29, 29],
-    popupAnchor: [0, -29]
+    iconSize: [74, 74],
+    iconAnchor: [37, 37],
+    popupAnchor: [0, -37]
   });
 }
 

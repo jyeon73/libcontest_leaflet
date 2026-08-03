@@ -5,13 +5,19 @@ export default async function handler(req, res) {
 
   const { question, placeName } = req.body;
 
-  let keyword = await extractSearchKeyword(question, placeName);
-  let items = await searchNL(keyword);
+  const gptKeyword = await extractSearchKeyword(question, placeName);
+  const simplifiedPlace = simplifyPlaceName(placeName);
 
-  // 국중도 검색은 여러 단어를 AND로 매칭해서 0건이 자주 나옴 -> 장소명만으로 한 번 더 시도
-  if (items.length === 0 && keyword !== placeName) {
-    keyword = placeName;
-    items = await searchNL(keyword);
+  // 국중도 검색은 여러 단어를 AND로 매칭해서 0건이 되기 쉬움 -> 순서대로 시도
+  // 1) GPT가 뽑은 키워드 2) 장소 전체 표기 3) 장소의 핵심 명칭만(합성 지명의 "·" 이전 부분)
+  const candidates = [...new Set([gptKeyword, placeName, simplifiedPlace])];
+
+  let keyword = candidates[0];
+  let items = [];
+  for (const candidate of candidates) {
+    items = await searchNL(candidate);
+    keyword = candidate;
+    if (items.length > 0) break;
   }
 
   if (items.length === 0) {
@@ -59,6 +65,11 @@ export default async function handler(req, res) {
   res.status(200).json({ selected: result, searchedKeyword: keyword });
 }
 
+function simplifyPlaceName(placeName) {
+  // "마포 양화진·절두산" -> "마포", "노량진·한강철교" -> "노량진" 처럼 합성 지명의 핵심 명칭만 추출
+  return placeName.split(/[·\s]/)[0];
+}
+
 async function searchNL(keyword) {
   const searchUrl = `https://www.nl.go.kr/NL/search/openApi/searchKolisNet.do?key=${process.env.NL_API_KEY}&kwd=${encodeURIComponent(keyword)}&apiType=xml&pageSize=15`;
   const xmlResponse = await fetch(searchUrl);
@@ -76,7 +87,7 @@ async function extractSearchKeyword(question, placeName) {
     body: JSON.stringify({
       model: 'gpt-4o-mini',
       messages: [
-        { role: 'system', content: '너는 사용자 질문에서 도서관 자료 검색에 쓸 핵심 키워드를 뽑는 역할이다. 설명 없이 검색어만 출력하라. 국중도 검색은 여러 단어를 AND로 매칭해서 단어가 많으면 0건이 되기 쉬우니, 최대한 1~2단어로 짧게 뽑아라(장소명 하나만 내도 됨). 장소명은 반드시 포함시켜라.' },
+        { role: 'system', content: '너는 사용자 질문에서 도서관 자료 검색에 쓸 핵심 키워드를 뽑는 역할이다. 설명 없이 검색어만 출력하라. 질문에 구체적인 대상(인물, 건물, 사건 이름 등)이 있으면 그 단어를 우선 사용해라(예: "당인리발전소가 뭐야?" -> "당인리발전소"). 장소명은 "마포 양화진·절두산"처럼 여러 지명이 합쳐진 표기일 수 있는데, 이걸 그대로 통째로 쓰지 말고 핵심 지명 한 단어만 사용해라(예: "마포"). 국중도 검색은 여러 단어를 AND로 매칭해서 단어가 많으면 0건이 되기 쉬우니 최대한 1~2단어로 짧게 뽑아라.' },
         { role: 'user', content: `장소: ${placeName}\n질문: ${question}` }
       ],
       max_tokens: 20

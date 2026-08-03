@@ -1,4 +1,4 @@
-// 국립중앙도서관 자료 조사 정리본(자료, 역사 정리본.pdf) 기반 데이터
+// 국립중앙도서관 자료 조사 정리본(역사정보 정리본.pdf) 기반 데이터, 이미지는 자료이미지2 폴더 매칭
 // note: 국중도 검색 URL 일부는 PDF 텍스트 추출 과정에서 공백/기호가 깨졌을 수 있어 추후 원문 대조 필요
 const places = [
   {
@@ -79,10 +79,10 @@ const places = [
           { title: '절두산 순교성지', type: '웹사이트', note: '국립중앙도서관이 운영하는 웹 아카이브 서비스 OASIS에서 절두산 순교성지의 역사와 병인박해, 순교자 기념 시설 등을 소개하는 웹자료를 확인할 수 있다. (접근 불가능한 페이지 다수)', image: 'archive-images/mapo_geundae_02.jpg', url: 'http://wayback.nl.go.kr/wayback/jsp/oasis/oasisReplay.jsp?collection=20170530132850&contentsId=CNTS_00092426269&url=http://jeoldusan.or.kr&licCd=0' },
           { title: '순무영등록(巡撫營謄錄)', type: '고문헌', author: '순무영', note: '1866년 병인양요 때 설치된 임시 군영인 \'순무영\'에서 작성한 공식 등록으로, 프랑스군에 대응하기 위한 군사 작전과 병력 동원, 무기·군량 조달, 전투 상황 등을 기록한 1차 사료이다.', image: 'archive-images/mapo_geundae_03.png', url: 'https://www.nl.go.kr/NL/contents/search.do?pageNum=1&pageSize=30&srchTarget=total&kwd=%EC%88%9C%EB%AC%B4%EC%98%81%EB%93%B1%EB%A1%9D#viewKey=CNTS_00047974816&viewType=C&category=%EA%B3%A0%EB%AC%B8%ED%97%8C&pageIdx=2&jourId=' },
           { title: '한말역화, 병인양요(일)', type: '신문', publisher: '군산신문사', date: '1949-01-04', image: 'archive-images/mapo_geundae_04.jpg', url: '' },
-          { title: '한말역화: 병인양요(이)', type: '신문', publisher: '군산신문사', date: '1949-01-05', image: '', url: 'https://nl.go.kr/newspaper/detail.do?content_id=CNTS_00076768009' },
-          { title: '한말역화, 병인양요(사)', type: '신문', publisher: '군산신문사', date: '1949-01-07', image: '', url: 'https://nl.go.kr/newspaper/detail.do?content_id=CNTS_00076827274' },
-          { title: '한말사화, 병인양요(오)', type: '신문', publisher: '군산신문사', date: '1949-01-08', image: '', url: 'https://nl.go.kr/newspaper/detail.do?content_id=CNTS_00076827346' },
-          { title: '한말사화, 병인양요(육)', type: '신문', publisher: '군산신문사', date: '1949-01-09', image: '', url: 'https://nl.go.kr/newspaper/detail.do?content_id=CNTS_00076827378' }
+          { title: '한말역화: 병인양요(이)', type: '신문', publisher: '군산신문사', date: '1949-01-05', image: 'archive-images/mapo_geundae_05.jpg', url: 'https://nl.go.kr/newspaper/detail.do?content_id=CNTS_00076768009' },
+          { title: '한말역화, 병인양요(사)', type: '신문', publisher: '군산신문사', date: '1949-01-07', image: 'archive-images/mapo_geundae_06.jpg', url: 'https://nl.go.kr/newspaper/detail.do?content_id=CNTS_00076827274' },
+          { title: '한말사화, 병인양요(오)', type: '신문', publisher: '군산신문사', date: '1949-01-08', image: 'archive-images/mapo_geundae_07.jpg', url: 'https://nl.go.kr/newspaper/detail.do?content_id=CNTS_00076827346' },
+          { title: '한말사화, 병인양요(육)', type: '신문', publisher: '군산신문사', date: '1949-01-09', image: 'archive-images/mapo_geundae_08.jpg', url: 'https://nl.go.kr/newspaper/detail.do?content_id=CNTS_00076827378' }
         ]
       },
       {
@@ -123,7 +123,7 @@ const places = [
         era: '근대(대한제국)',
         description: '1899년: 대한민국 최초의 철도인 경인선이 개통되었다.\n1900년: 용산과 노량진을 잇는 한강 최초의 다리인 한강철교가 세워졌다.',
         items: [
-          { title: '(근대초기 한국문화 과거로 가는 시간여행) 1899년 9월 18일 노량진역에서 열린 경인선 개통식', type: '이미지/사진', representative: true, date: '2004', image: '', url: 'https://www.nl.go.kr/NL/contents/search.do?pageNum=1&pageSize=30&srchTarget=total&kwd=%EA%B2%BD%EC%9D%B8%EC%84%A0_%EA%B0%9C%ED%86%B5#viewKey=CNTS_00132804351&viewType=C&category=%EB%A9%80%ED%8B%B0%EB%AF%B8%EB%94%94%EC%96%B4&pageIdx=5&jourId=' },
+          { title: '(근대초기 한국문화 과거로 가는 시간여행) 1899년 9월 18일 노량진역에서 열린 경인선 개통식', type: '이미지/사진', representative: true, date: '2004', image: 'archive-images/noryangjin_geundae_00.png', url: 'https://www.nl.go.kr/NL/contents/search.do?pageNum=1&pageSize=30&srchTarget=total&kwd=%EA%B2%BD%EC%9D%B8%EC%84%A0_%EA%B0%9C%ED%86%B5#viewKey=CNTS_00132804351&viewType=C&category=%EB%A9%80%ED%8B%B0%EB%AF%B8%EB%94%94%EC%96%B4&pageIdx=5&jourId=' },
           { title: '경인선은 개통(京仁線은 開通)', type: '신문', publisher: '매일신보사', date: '1940-07-11', image: 'archive-images/noryangjin_geundae_01.jpg', url: 'https://nl.go.kr/newspaper/detail.do?content_id=CNTS_00095032653' },
           { title: '조선철도사(朝鮮鐵道史)', type: '도서', author: '조선총독부 철도국', publisher: '조선총독부철도국', date: '1915', note: '일제 강점기 경인선을 비롯한 조선의 주요 철도의 건설 과정, 노선, 운영 현황 등을 기록한 역사 자료이다.', image: 'archive-images/noryangjin_geundae_02.png', url: 'https://www.nl.go.kr/NL/contents/search.do?pageNum=1&pageSize=30&srchTarget=total&kwd=%EC%A1%B0%EC%84%A0%EC%B2%A0%EB%8F%84%EC%82%AC#viewKey=CNTS_00047999901&viewType=C&category=%EB%8F%84%EC%84%9C&pageIdx=4&jourId=' }
         ]
@@ -149,8 +149,8 @@ const places = [
         era: '조선 시대',
         description: '1782년(정조 6): 정조와 의빈 성씨 사이에서 문효세자가 출생했다.\n1786년(정조 10): 문효세자가 5세로 요절했고, 고양 율목동(현 용산구 효창동)에 \'효창묘\'를 조성했다. 같은 해 11월 생모 의빈 성씨도 사망하여 효창묘 왼쪽 언덕에 안장되었다. 정조의 뜻에 따라 두 모자의 묘가 100보 거리로 나란히 배치되었다. 이후 순조의 후궁 숙의 박씨와 그 딸 영온옹주의 묘도 이 묘역에 조성되며 왕실 묘역으로 확장되었다.\n1870년(고종 7): \'효창묘\'에서 \'효창원\'으로 격상되었다.',
         items: [
-          { title: '정조실록 21권 — 「문효세자의 묘호를 문희로, 묘를 효창이라고 정하다」', type: '웹사이트', date: '1786', image: 'archive-images/hyochang_joseon_01.png', url: 'https://sillok.history.go.kr/id/kva_11006020_00' },
-          { title: '정조실록 22권 — 「문효세자를 효창묘에 장사지내다」', type: '웹사이트', date: '1786', image: 'archive-images/hyochang_joseon_02.png', url: 'https://sillok.history.go.kr/id/kva_11007119_001' }
+          { title: '정조실록 21권 — 「문효세자의 묘호를 문희로, 묘를 효창이라고 정하다」', type: '웹사이트', date: '1786', image: 'archive-images/hyochang_joseon_01.jpg', url: 'https://sillok.history.go.kr/id/kva_11006020_00' },
+          { title: '정조실록 22권 — 「문효세자를 효창묘에 장사지내다」', type: '웹사이트', date: '1786', image: 'archive-images/hyochang_joseon_02.jpg', url: 'https://sillok.history.go.kr/id/kva_11007119_001' }
         ]
       },
       {
@@ -158,16 +158,16 @@ const places = [
         description: '1894년: 청일전쟁 당시 일본군이 효창원 인근 만리창 부지에 주둔하며, 숲이 훼손되었다.\n1908년: 일본인 공원 조성을 위해 효창원 산림을 빌려달라는 청원 기사(『황성신문』 1908.2.28)가 등장했다. 이미 이 시기부터 훼손 시도가 진행되었다.\n1919~1921년: 조선총독부 철도국이 조선호텔 부속 골프장으로 \'효창원 골프코스\'(57,000평, 9홀 중 7홀 사용)가 조성되었고, 이는 서울 최초의 골프장이다.\n1924~1925년: 효창원을 공원(아동유원지·경기장 등)으로 조성하는 사업이 본격화되었다. 1938년 『매일신보』에는 \'효창원 대개수\' 계획도(아동유원, 야외극장, 박물관 등)가 실렸다.\n1940년: 의빈 성씨 묘가 서삼릉으로 강제 이장되었다.\n1944년: 문효세자 효창원(묘) 또한 서삼릉으로 강제 이장되었다. 이로써 효창\'원\'은 명목상 폐지되고 \'효창공원\'이라는 이름만 남게 되었다.',
         items: [
           { title: '산림청차(山林請借)', type: '신문', publisher: '황성신문사', date: '1908-02-28', note: '"용산 거류 일본민단장이 효창원 산림을 공원지로 빌려달라 청원"', image: 'archive-images/hyochang_geundae_01.jpg', url: 'https://nl.go.kr/newspaper/detail.do?content_id=CNTS_00093820031' },
-          { title: '나도향, 『벙어리 삼룡이』(雜誌《黎明》창간호, 1925.7.1)', type: '잡지/학술지', publisher: '여명사', note: '효창원 일대의 옛 지명(연화봉)을 배경으로 한 소설', image: '', url: '' },
-          { title: '경성명물또하나 삽만원공비들여 효창원을 대개수: 오롱조롱 각가지 시설을 완비 아동본위락천지화', type: '신문', representative: true, publisher: '매일신보사', date: '1938-02-19', note: '효창공원설계약도 수록', image: 'archive-images/hyochang_geundae_02.jpg', url: 'https://nl.go.kr/newspaper/detail.do?content_id=CNTS_00094881004' }
+          { title: '나도향, 『벙어리 삼룡이』(雜誌《黎明》창간호, 1925.7.1)', type: '잡지/학술지', publisher: '여명사', note: '효창원 일대의 옛 지명(연화봉)을 배경으로 한 소설', image: 'archive-images/hyochang_geundae_02.jpg', url: '' },
+          { title: '경성명물또하나 삽만원공비들여 효창원을 대개수: 오롱조롱 각가지 시설을 완비 아동본위락천지화', type: '신문', representative: true, publisher: '매일신보사', date: '1938-02-19', note: '효창공원설계약도 수록', image: 'archive-images/hyochang_geundae_03.jpg', url: 'https://nl.go.kr/newspaper/detail.do?content_id=CNTS_00094881004' }
         ]
       },
       {
         era: '현대',
         description: '1945년 8월: 광복 직후 일본군 숙영지가 철거되었다.\n1946년 7월: 김구 주도로 이봉창·윤봉길·백정기 삼의사 유해를 국내로 봉환하여 삼의사묘를 조성했다. 유해를 찾지 못한 안중근 의사를 위한 가묘도 함께 조성했다.(2019년 정식 묘비로 교체, 현재도 유해는 없음)\n1948년 9월: 임시정부 요인 이동녕·조성환·차이석 유해를 안장했다.(임정요인 묘역)\n1949년 7월: 김구, 경교장에서 암살 후 국민장으로 이곳에 안장되었다.\n1956년: 독립운동가 묘 이장 후 이승만 정부가 운동장 건립 계획을 발표했다.(반발로 축소)\n1959년 11월 착공~1960년 10월 완공: 한국 최초의 국제규격 축구 전용구장 \'효창운동장\'을 건립했다. 이는 1960년 제2회 아시아축구선수권대회 개최를 위함이었다.\n1961년 이후: 박정희 정부 시기 반공투사위령탑 건립, 대한노인회관 조성 등으로 공간 정체성이 혼재되기도 했다.\n1989년: 효창공원이 사적 제330호로 지정되었다.\n2002년: 백범김구기념관이 개관했다.\n2019년~현재: 3·1운동/임시정부 수립 100주년을 계기로 \'효창독립100년공원\' 조성 사업을 추진하고 있다.',
         items: [
-          { title: '아세아축구선수권대회제2회, 오만관중 뒤덮인 효창구장, 한국팀단연 "리드", 이스라엘『팀』의 개인기술현저', type: '신문', publisher: '평화신문사', date: '1960-10-19', image: '', url: 'https://nl.go.kr/newspaper/detail.do?content_id=CNTS_00132337818' },
-          { title: '삼열사국민장의엄숙히 거행 애수에어린삼천리전역 혁혁한 위업을 추억 영령은 영원히 효창원에', type: '신문', publisher: '대동신문사', date: '1946-07-07', image: 'archive-images/hyochang_hyeondae_01.jpg', url: 'https://nl.go.kr/newspaper/detail.do?content_id=CNTS_00067991858' },
+          { title: '아세아축구선수권대회제2회, 오만관중 뒤덮인 효창구장, 한국팀단연 "리드", 이스라엘『팀』의 개인기술현저', type: '신문', publisher: '평화신문사', date: '1960-10-19', image: 'archive-images/hyochang_hyeondae_01.jpg', url: 'https://nl.go.kr/newspaper/detail.do?content_id=CNTS_00132337818' },
+          { title: '삼열사국민장의엄숙히 거행 애수에어린삼천리전역 혁혁한 위업을 추억 영령은 영원히 효창원에', type: '신문', publisher: '대동신문사', date: '1946-07-07', image: 'archive-images/hyochang_hyeondae_02.jpg', url: 'https://nl.go.kr/newspaper/detail.do?content_id=CNTS_00067991858' },
           { title: '현대문학 속 청파동/숙명여대 삼거리', type: '참고자료', note: '김호연 『불편한 편의점』(2021) — 청파동/숙명여대 삼거리 배경 · 최승자 「청파동을 기억하는가」(『이 시대의 사랑』, 1981) 외 「두 번의 죽음」·「망제」 (저작권 생존 작품 — 원문 URL 없음, 서지정보만 표기)', image: '', url: '' }
         ]
       }

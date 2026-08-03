@@ -40,7 +40,8 @@ export default async function handler(req, res) {
         { role: 'system', content: '너는 도서관 자료 목록에서 질문과 가장 관련있는 항목을 고르는 역할만 한다. 목록에 없는 내용을 만들어내지 마라. 반드시 JSON 배열로만 답하라. 형식: [{"index":0,"reason":"짧은 이유 한 문장"}]. 최대 4개까지만 고른다.' },
         { role: 'user', content: `장소: ${placeName}\n질문: ${question}\n\n[검색결과 목록]\n${candidateList}` }
       ],
-      max_tokens: 300
+      max_tokens: 300,
+      temperature: 0.2
     })
   });
 
@@ -87,10 +88,11 @@ async function extractSearchKeyword(question, placeName) {
     body: JSON.stringify({
       model: 'gpt-4o-mini',
       messages: [
-        { role: 'system', content: '너는 사용자 질문에서 도서관 자료 검색에 쓸 핵심 키워드를 뽑는 역할이다. 설명 없이 검색어만 출력하라. 질문에 구체적인 대상(인물, 건물, 사건 이름 등)이 있으면 그 단어를 우선 사용해라(예: "당인리발전소가 뭐야?" -> "당인리발전소"). 장소명은 "마포 양화진·절두산"처럼 여러 지명이 합쳐진 표기일 수 있는데, 이걸 그대로 통째로 쓰지 말고 핵심 지명 한 단어만 사용해라(예: "마포"). 국중도 검색은 여러 단어를 AND로 매칭해서 단어가 많으면 0건이 되기 쉬우니 최대한 1~2단어로 짧게 뽑아라.' },
+        { role: 'system', content: '너는 사용자 질문에서 도서관 자료 검색에 쓸 핵심 키워드를 뽑는 역할이다. 설명 없이 검색어만 출력하라. 질문에 구체적인 대상(인물, 건물, 사건 이름 등)이 있으면 그 단어를 우선 사용해라(예: "당인리발전소가 뭐야?" -> "당인리발전소"). 장소명은 "마포 양화진·절두산"처럼 여러 지명이 합쳐진 표기일 수 있는데, 이걸 그대로 통째로 쓰지 말고 핵심 지명 한 단어만 사용해라(예: "마포"). 국중도 검색은 여러 단어를 AND로 매칭해서 단어가 많으면 0건이 되기 쉬우니 최대한 1~2단어로 짧게 뽑아라. 질문이나 장소명과 무관한 단어는 절대 만들어내지 마라.' },
         { role: 'user', content: `장소: ${placeName}\n질문: ${question}` }
       ],
-      max_tokens: 20
+      max_tokens: 20,
+      temperature: 0
     })
   });
 

@@ -66,7 +66,6 @@ const places = [
         description: '1945년: 광복 이후 \'서울형무소\', \'서울교도소\'(1961), \'서울구치소\'(1967)로 명칭이 바뀌며 계속 사용되었다.\n1970~1980년대: 군부 독재 시절 민주화 운동가, 진보적 지식인, 학생들이 투옥되는 등 민주화 운동의 수난사 현장이 되었다.\n1987년: 서울구치소가 경기도 의왕시로 이전했다.\n1998년: 옥사와 사형장 등을 보존·복원하여 \'서대문형무소역사관\'으로 개관했다. 독립운동과 민주화 운동의 역사적 현장이자 자주독립·자유의 소중함을 배우는 교육공간으로 활용되었다.',
         items: [
           { title: '데모학생 육명구속: 21일서울 교도소에', type: '신문', publisher: '마산일보사', date: '1964-04-21', image: 'archive-images/seodaemun_hyeondae_01.jpg', url: 'https://nl.go.kr/newspaper/detail.do?content_id=CNTS_00115011561' },
-          { title: '서대문형무소 역사관 개관', type: '잡지/학술지', publisher: '문경문화원', date: '1998', note: '원문 확인 불가', image: '', url: '' },
           { title: '장벽을 넘어 해방으로, 여성 독립운동가의 생애', type: '주제별 컬렉션', representative: true, note: '유관순, 권애라, 김마리아, 강주룡, 박차정 등 여성 독립운동가 9인의 생애를 담은 국립중앙도서관 컬렉션', image: 'archive-images/seodaemun_hyeondae_02.jpg', url: 'https://www.nl.go.kr/NL/contents/N20103000000.do?schM=contList&schOpt1=CA0000000049&schOpt2=CA0000000600&page=1#cont_banner' }
         ]
       }

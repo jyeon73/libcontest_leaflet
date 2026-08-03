@@ -92,6 +92,15 @@ function updateMarkerAppearance(marker, p) {
 }
 
 places.forEach(p => {
+  if (p.boundary && p.boundary.length > 2) {
+    const polygon = L.polygon(p.boundary, {
+      color: p.color || '#666',
+      weight: 2,
+      fillColor: p.color || '#666',
+      fillOpacity: 0.22
+    }).addTo(map);
+    polygon.on('click', () => renderPanel(p, marker));
+  }
   const marker = L.marker([p.lat, p.lng], { icon: createIcon(p) }).addTo(map);
   if (!p.emblem) updateTooltip(marker, p);
   marker.on('click', () => {

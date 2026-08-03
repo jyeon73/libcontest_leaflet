@@ -1,4 +1,4 @@
-const map = L.map('map').setView([37.5665, 126.9780], 13);
+const map = L.map('map').setView([37.5510, 126.9508], 13);
 
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
   attribution: '&copy; OpenStreetMap contributors &copy; CARTO',

@@ -319,7 +319,6 @@ document.getElementById('chatSendBtn').addEventListener('click', async () => {
       <p><b>${item.title}</b> (${item.type})</p>
       <p>${item.author} · ${item.year}</p>
       <p><i>${item.reason}</i></p>
-      ${item.url ? `<a href="${item.url}" target="_blank">원문 보기</a>` : '<span class="item-nolink">원문 링크 없음</span>'}
     </div>
   `).join('');
 

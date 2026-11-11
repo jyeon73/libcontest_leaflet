@@ -1,6 +1,6 @@
 const map = L.map('map').setView([37.5510, 126.9508], 13);
 
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?key=https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=cb1_56og_1_491e378dbace904adf4cb971', {
   attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
   maxZoom: 19
 }).addTo(map);
